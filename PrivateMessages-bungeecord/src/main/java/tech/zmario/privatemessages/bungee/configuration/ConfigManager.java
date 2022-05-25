@@ -18,12 +18,16 @@ public class ConfigManager {
     private final File folder;
 
     public ConfigManager(Plugin plugin) {
+
         this.plugin = plugin;
         this.configs = new HashMap<>();
+
         folder = this.plugin.getDataFolder();
+
         if (!folder.exists()) {
             folder.mkdir();
         }
+
     }
 
     public Configuration get(String file) {
@@ -32,9 +36,11 @@ public class ConfigManager {
 
     public void create(String file, String source) {
         File resourcePath = new File(folder + "/" + file);
+
         if (!resourcePath.exists()) {
             createYAML(file, source);
         }
+
         reload(file);
     }
 
@@ -44,23 +50,29 @@ public class ConfigManager {
 
     public void save(String file) {
         Configuration config = get(file);
+
         if (config == null) {
             throw new IllegalArgumentException("The specified configuration file doesn't exist!");
         }
+
         try {
             ConfigurationProvider.getProvider(YamlConfiguration.class)
                     .save(config, new File(folder + "/" + file));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
         this.put(file, config);
     }
 
     public void reload(String file) {
+
         if (!this.configs.containsKey(file)) {
             createYAML(file);
         }
+
         Configuration conf = this.load(file);
+
         this.put(file, conf);
     }
 
@@ -85,11 +97,15 @@ public class ConfigManager {
     private void createYAML(String resourcePath, String source) {
         try {
             File file = new File(folder + "/" + resourcePath);
+
             if (!file.getParentFile().exists() || !file.exists()) {
+
                 file.getParentFile().mkdir();
+
                 if (!file.exists()) {
                     file.createNewFile();
                 }
+
                 Files.copy(plugin.getResourceAsStream(source),
                         file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }

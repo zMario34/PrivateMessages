@@ -10,7 +10,6 @@ import tech.zmario.privatemessages.velocity.enums.MessagesConfiguration;
 import tech.zmario.privatemessages.velocity.enums.SettingsConfiguration;
 
 import java.util.List;
-import java.util.Objects;
 
 @UtilityClass
 public class Utils {
@@ -32,7 +31,7 @@ public class Utils {
         StringBuilder builder = new StringBuilder();
         for (String string : list) {
             builder.append(string);
-            if (!Objects.equals(list.get(list.size() - 1), string)) {
+            if (!list.get(list.size() - 1).equals(string)) {
                 builder.append(";");
             }
         }

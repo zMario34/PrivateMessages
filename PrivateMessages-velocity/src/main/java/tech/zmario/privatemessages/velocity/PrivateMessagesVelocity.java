@@ -19,7 +19,6 @@ import tech.zmario.privatemessages.velocity.listeners.BaseListeners;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.net.URISyntaxException;
 
 @Plugin(
         id = "privatemessages",
@@ -55,7 +54,7 @@ public class PrivateMessagesVelocity {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         PluginDescription pluginDescription = getProxyServer().getPluginManager().getPlugin("privatemessages").get().getDescription();
         setupConfigurations(pluginDescription);
-        setupInstances(pluginDescription);
+        setupInstances();
         registerListeners(new BaseListeners(this));
         registerCommands();
     }
@@ -66,16 +65,9 @@ public class PrivateMessagesVelocity {
         configManager.create("messages.yml");
     }
 
-    private void setupInstances(PluginDescription pluginDescription) {
+    private void setupInstances() {
         instance = this;
         storage = new DataStorage();
-        File serverJar;
-        try {
-            serverJar = new File(Plugin.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        pluginFolder = new File(serverJar.getParentFile() + "/plugins/" + pluginDescription.getId());
         libraryManager = new VelocityLibraryManager<>(logger, pluginFolder.toPath(), getProxyServer().getPluginManager(), this);
         libraryManager.addMavenCentral();
         databaseManager = new DatabaseManager(this, SettingsConfiguration.MYSQL_ENABLED.getBoolean());

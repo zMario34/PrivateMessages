@@ -24,7 +24,7 @@ public class MessageCommand implements SimpleCommand {
     public void execute(Invocation invocation) {
         CommandSource source = invocation.source();
         String[] args = invocation.arguments();
-        if (args.length == 1 && args[0].equalsIgnoreCase("reload") && source.hasPermission(SettingsConfiguration.COMMAND_RELOAD_PERMISSION.getString())) {
+        if (args.length == 1 && args[0].equalsIgnoreCase(SettingsConfiguration.COMMAND_RELOAD_NAME.getString()) && source.hasPermission(SettingsConfiguration.COMMAND_RELOAD_PERMISSION.getString())) {
             plugin.getConfigManager().reloadAll();
             source.sendMessage(MessagesConfiguration.CONFIGURATIONS_RELOADED.getString());
             return;

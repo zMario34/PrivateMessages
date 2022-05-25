@@ -23,7 +23,7 @@ public class MessageCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (args.length == 1 && args[0].equalsIgnoreCase("reload") && sender.hasPermission(SettingsConfiguration.COMMAND_RELOAD_PERMISSION.getString())) {
+        if (args.length == 1 && args[0].equalsIgnoreCase(SettingsConfiguration.COMMAND_RELOAD_NAME.getString()) && sender.hasPermission(SettingsConfiguration.COMMAND_RELOAD_PERMISSION.getString())) {
             plugin.getConfigManager().reloadAll();
             sender.sendMessage(MessagesConfiguration.CONFIGURATIONS_RELOADED.getString());
             return;

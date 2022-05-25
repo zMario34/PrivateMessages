@@ -8,6 +8,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import tech.zmario.privatemessages.bungee.commands.*;
 import tech.zmario.privatemessages.bungee.configuration.ConfigManager;
 import tech.zmario.privatemessages.bungee.database.DatabaseManager;
+import tech.zmario.privatemessages.bungee.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.bungee.listeners.BaseListeners;
 import tech.zmario.privatemessages.common.configuration.Configuration;
 import tech.zmario.privatemessages.common.storage.DataStorage;
@@ -55,7 +56,7 @@ public final class PrivateMessagesBungee extends Plugin {
         storage = new DataStorage();
         libraryManager = new BungeeLibraryManager(this);
         libraryManager.addMavenCentral();
-        //databaseManager = new DatabaseManager(this, SettingsConfiguration.MYSQL_ENABLED.getBoolean());
+        databaseManager = new DatabaseManager(this, SettingsConfiguration.MYSQL_ENABLED.getBoolean());
     }
 
     @Override
