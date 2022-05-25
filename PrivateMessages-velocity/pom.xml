@@ -56,7 +56,7 @@
             <groupId>tech.zmario</groupId>
             <artifactId>PrivateMessages-common</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.byteflux</groupId>

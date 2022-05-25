@@ -25,13 +25,11 @@ public final class PrivateMessagesBungee extends Plugin {
 
     @Override
     public void onEnable() {
-        long startTime = System.currentTimeMillis();
         setupConfigurations();
         setupInstances();
         registerListeners(new BaseListeners(this));
         registerCommands(new MessageCommand(this), new ReplyCommand(this), new IgnoreCommand(this),
                 new SocialSpyCommand(this), new ToggleMessagesCommand(this));
-        getLogger().info("Enabled in " + (System.currentTimeMillis() - startTime) + "ms!");
     }
 
     private void registerCommands(Command... commands) {
@@ -42,6 +40,7 @@ public final class PrivateMessagesBungee extends Plugin {
 
     private void setupConfigurations() {
         configManager = new ConfigManager(this);
+
         configManager.create("config.yml");
         configManager.create("messages.yml");
     }

@@ -53,6 +53,7 @@ public class PrivateMessagesVelocity {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
         PluginDescription pluginDescription = getProxyServer().getPluginManager().getPlugin("privatemessages").get().getDescription();
+
         setupConfigurations(pluginDescription);
         setupInstances();
         registerListeners(new BaseListeners(this));
@@ -82,15 +83,19 @@ public class PrivateMessagesVelocity {
         proxyServer.getCommandManager().register(proxyServer.getCommandManager().metaBuilder(SettingsConfiguration.COMMAND_MESSAGE_NAME.getString())
                 .aliases(SettingsConfiguration.COMMAND_MESSAGE_ALIASES.getStringList().toArray(new String[0]))
                 .build(), new MessageCommand(this));
+
         proxyServer.getCommandManager().register(proxyServer.getCommandManager().metaBuilder(SettingsConfiguration.COMMAND_REPLY_NAME.getString())
                 .aliases(SettingsConfiguration.COMMAND_REPLY_ALIASES.getStringList().toArray(new String[0]))
                 .build(), new ReplyCommand(this));
+
         proxyServer.getCommandManager().register(proxyServer.getCommandManager().metaBuilder(SettingsConfiguration.COMMAND_IGNORE_NAME.getString())
                 .aliases(SettingsConfiguration.COMMAND_IGNORE_ALIASES.getStringList().toArray(new String[0]))
                 .build(), new IgnoreCommand(this));
+
         proxyServer.getCommandManager().register(proxyServer.getCommandManager().metaBuilder(SettingsConfiguration.COMMAND_TOGGLE_MESSAGES_NAME.getString())
                 .aliases(SettingsConfiguration.COMMAND_TOGGLE_MESSAGES_ALIASES.getStringList().toArray(new String[0]))
                 .build(), new ToggleMessagesCommand(this));
+
         proxyServer.getCommandManager().register(proxyServer.getCommandManager().metaBuilder(SettingsConfiguration.COMMAND_SOCIAL_SPY_NAME.getString())
                 .aliases(SettingsConfiguration.COMMAND_SOCIAL_SPY_ALIASES.getStringList().toArray(new String[0]))
                 .build(), new SocialSpyCommand(this));
