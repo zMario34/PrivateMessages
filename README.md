@@ -8,13 +8,14 @@ We use Maven to handle dependencies & building.
 To compile the project, you must have: Java 8 JDK, Git and Maven
 
 #### Compiling from source
+Run the following command from your command line:
 ```
 git clone https://github.com/zMario34/PrivateMessages.git
 cd PrivateMessages
 mvn clean install
 ```
 
-You can find the output jars in the `target` directories of every module.
+You can find the output JARs in the `target` directories of every module.
 
 ## Contributing
 #### Pull Requests

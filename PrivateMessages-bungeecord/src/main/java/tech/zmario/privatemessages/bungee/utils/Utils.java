@@ -8,8 +8,6 @@ import tech.zmario.privatemessages.bungee.enums.MessagesConfiguration;
 import tech.zmario.privatemessages.bungee.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.storage.DataStorage;
 
-import java.util.List;
-
 @UtilityClass
 public class Utils {
 

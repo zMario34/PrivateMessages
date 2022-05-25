@@ -54,16 +54,18 @@ public class DatabaseManager {
     }
 
     private void makeTables() {
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `players_data` (uuid varchar(36) NOT NULL, social_spy boolean NOT NULL, toggled_messages boolean NOT NULL)");
-             PreparedStatement preparedStatement1 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `ignored_players` (uuid varchar(36) NOT NULL, ignored varchar(36) NOT NULL)")) {
+        plugin.getProxy().getScheduler().runAsync(plugin, () -> {
+            try (Connection connection = getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `players_data` (uuid varchar(36) NOT NULL, social_spy boolean NOT NULL, toggled_messages boolean NOT NULL)");
+                 PreparedStatement preparedStatement1 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `ignored_players` (uuid varchar(36) NOT NULL, ignored varchar(36) NOT NULL)")) {
 
-            preparedStatement.executeUpdate();
-            preparedStatement1.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            plugin.getLogger().severe("Failed to create tables. Error message: " + e.getMessage());
-        }
+                preparedStatement.executeUpdate();
+                preparedStatement1.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                plugin.getLogger().severe("Failed to create tables. Error message: " + e.getMessage());
+            }
+        });
     }
 
     public boolean isPresent(ProxiedPlayer player) {

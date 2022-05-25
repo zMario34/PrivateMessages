@@ -9,8 +9,6 @@ import tech.zmario.privatemessages.velocity.PrivateMessagesVelocity;
 import tech.zmario.privatemessages.velocity.enums.MessagesConfiguration;
 import tech.zmario.privatemessages.velocity.enums.SettingsConfiguration;
 
-import java.util.List;
-
 @UtilityClass
 public class Utils {
 
