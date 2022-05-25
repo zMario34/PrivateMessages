@@ -31,7 +31,7 @@ public class RemoveSubCommand implements SubCommand {
             return;
         }
         plugin.getStorage().updateIgnore(player.getUniqueId(), args[1].toLowerCase(), false);
-        plugin.getDatabaseManager().updateIgnores(player, plugin.getStorage().getGamePlayers().get(player.getUniqueId()).getIgnoredPlayers());
+        plugin.getDatabaseManager().removeIgnore(player, args[1].toLowerCase());
         player.sendMessage(MessagesConfiguration.IGNORE_REMOVE_PLAYER_REMOVED.getString("%target%:" + args[1]));
     }
 

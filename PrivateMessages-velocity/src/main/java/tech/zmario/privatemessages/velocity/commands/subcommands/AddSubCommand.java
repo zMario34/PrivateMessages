@@ -32,7 +32,7 @@ public class AddSubCommand implements SubCommand {
         }
 
         plugin.getStorage().updateIgnore(player.getUniqueId(), args[1].toLowerCase(), true);
-        plugin.getDatabaseManager().updateIgnores(player, plugin.getStorage().getGamePlayers().get(player.getUniqueId()).getIgnoredPlayers());
+        plugin.getDatabaseManager().addIgnore(player, args[1].toLowerCase());
 
         player.sendMessage(MessagesConfiguration.IGNORE_ADD_PLAYER_ADDED.getString("%target%:" + args[1]));
     }

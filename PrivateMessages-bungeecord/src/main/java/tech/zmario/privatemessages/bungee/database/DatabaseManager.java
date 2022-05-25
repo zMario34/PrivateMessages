@@ -7,12 +7,10 @@ import net.byteflux.libby.Library;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import tech.zmario.privatemessages.bungee.PrivateMessagesBungee;
 import tech.zmario.privatemessages.bungee.enums.SettingsConfiguration;
-import tech.zmario.privatemessages.bungee.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -33,7 +31,6 @@ public class DatabaseManager {
     private void setup(boolean mysql) {
         if (mysql) {
             Library hikariCp = Library.builder().groupId("com{}zaxxer").artifactId("HikariCP").version("4.0.3").build();
-
             Library mysqlConnector = Library.builder().groupId("mysql").artifactId("mysql-connector-java").version("8.0.19").build();
 
             plugin.getLibraryManager().loadLibrary(hikariCp);
@@ -52,15 +49,17 @@ public class DatabaseManager {
             Library sqLite = Library.builder().groupId("org{}xerial").artifactId("sqlite-jdbc").version("3.36.0.3").build();
 
             plugin.getLibraryManager().loadLibrary(sqLite);
-
             connection = getConnection();
         }
     }
 
     private void makeTables() {
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `players_data` (uuid varchar(36) NOT NULL, ignores longtext, social_spy boolean NOT NULL, toggled_messages boolean NOT NULL)")) {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `players_data` (uuid varchar(36) NOT NULL, social_spy boolean NOT NULL, toggled_messages boolean NOT NULL)");
+             PreparedStatement preparedStatement1 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `ignored_players` (uuid varchar(36) NOT NULL, ignored varchar(36) NOT NULL)")) {
 
             preparedStatement.executeUpdate();
+            preparedStatement1.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             plugin.getLogger().severe("Failed to create tables. Error message: " + e.getMessage());
@@ -70,7 +69,6 @@ public class DatabaseManager {
     public boolean isPresent(ProxiedPlayer player) {
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM players_data WHERE uuid = ?")) {
-
                 preparedStatement.setString(1, player.getUniqueId().toString());
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -94,12 +92,10 @@ public class DatabaseManager {
 
     public void createPlayer(ProxiedPlayer player) {
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {
-            try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement("INSERT INTO players_data (uuid, ignores, social_spy, toggled_messages) VALUES (?, ?, ?, ?);")) {
-
+            try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement("INSERT INTO players_data (uuid, social_spy, toggled_messages) VALUES (?, ?, ?);")) {
                 statement.setString(1, player.getUniqueId().toString());
-                statement.setString(2, null);
+                statement.setBoolean(2, false);
                 statement.setBoolean(3, false);
-                statement.setBoolean(4, false);
 
                 statement.executeUpdate();
 
@@ -113,9 +109,7 @@ public class DatabaseManager {
     public Connection getConnection() {
         try {
             if (dataSource != null) {
-
                 return dataSource.getConnection();
-
             } else {
                 File databaseFile = new File(plugin.getDataFolder(), "data.db");
 
@@ -174,16 +168,13 @@ public class DatabaseManager {
     public List<String> getIgnoredPlayers(ProxiedPlayer player) {
         List<String> ignoredPlayers = Lists.newArrayList();
         CompletableFuture.runAsync(() -> {
-
-            try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("SELECT ignores FROM players_data WHERE uuid = ?")) {
-
+            try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(
+                    "SELECT ignored FROM ignored_players INNER JOIN players_data ON players_data.uuid = ignored_players.uuid WHERE players_data.uuid = ?")) {
                 preparedStatement.setString(1, player.getUniqueId().toString());
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
-                    if (resultSet.next() && resultSet.getString("ignores") != null) {
-                        ignoredPlayers.addAll(Arrays.asList(resultSet.getString("ignores").split(";")));
-
+                    while (resultSet.next()) {
+                        ignoredPlayers.add(resultSet.getString("ignored"));
                     }
                 }
             } catch (SQLException e) {
@@ -198,11 +189,9 @@ public class DatabaseManager {
     public boolean getToggledStatus(ProxiedPlayer player) {
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("SELECT toggled_messages FROM players_data WHERE uuid = ?")) {
-
                 preparedStatement.setString(1, player.getUniqueId().toString());
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
                     if (resultSet.next()) {
                         return resultSet.getBoolean("toggled_messages");
                     }
@@ -224,16 +213,13 @@ public class DatabaseManager {
 
     public boolean getSocialSpyStatus(ProxiedPlayer player) {
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
-
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("SELECT social_spy FROM players_data WHERE uuid = ?")) {
-
                 preparedStatement.setString(1, player.getUniqueId().toString());
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
                         return resultSet.getBoolean("social_spy");
                     }
-
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -251,29 +237,39 @@ public class DatabaseManager {
         return false;
     }
 
-    public void updateIgnores(ProxiedPlayer player, List<String> ignoresList) {
+    public void removeIgnore(ProxiedPlayer player, String ignored) {
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {
-
-            try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players_data SET ignores = ? WHERE uuid = ?")) {
-
-                preparedStatement.setString(1, Utils.listToString(ignoresList));
-                preparedStatement.setString(2, player.getUniqueId().toString());
+            try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM ignored_players WHERE uuid = ? AND ignored = ?")) {
+                preparedStatement.setString(1, player.getUniqueId().toString());
+                preparedStatement.setString(2, ignored);
 
                 preparedStatement.executeUpdate();
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                plugin.getLogger().severe("Failed to update ignored players. Error message: " + e.getMessage());
+                plugin.getLogger().severe("Failed to remove ignore. Error message: " + e.getMessage());
             }
+        });
+    }
 
+    public void addIgnore(ProxiedPlayer player, String ignored) {
+        plugin.getProxy().getScheduler().runAsync(plugin, () -> {
+            try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO ignored_players (uuid, ignored) VALUES (?, ?);")) {
+                preparedStatement.setString(1, player.getUniqueId().toString());
+                preparedStatement.setString(2, ignored);
+
+                preparedStatement.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                plugin.getLogger().severe("Failed to add ignore. Error message: " + e.getMessage());
+            }
         });
     }
 
     public void updateSocialSpy(ProxiedPlayer player, boolean status) {
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {
-
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players_data SET social_spy = ? WHERE uuid = ?")) {
-
                 preparedStatement.setBoolean(1, status);
                 preparedStatement.setString(2, player.getUniqueId().toString());
 
@@ -289,7 +285,6 @@ public class DatabaseManager {
     public void updateMessagesToggled(ProxiedPlayer player, boolean status) {
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players_data SET toggled_messages = ? WHERE uuid = ?")) {
-
                 preparedStatement.setBoolean(1, status);
                 preparedStatement.setString(2, player.getUniqueId().toString());
 
