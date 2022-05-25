@@ -26,15 +26,4 @@ public class Utils {
                         "%target%:" + player.getUsername(), "%player%:" + player.getUsername(), "%message%:" + message,
                         "%player_server%:" + player.getCurrentServer().get().getServerInfo().getName(), "%target_server%:" + target.getCurrentServer().get().getServerInfo().getName())));
     }
-
-    public String listToString(List<String> list) {
-        StringBuilder builder = new StringBuilder();
-        for (String string : list) {
-            builder.append(string);
-            if (!list.get(list.size() - 1).equals(string)) {
-                builder.append(";");
-            }
-        }
-        return builder.toString();
-    }
 }
