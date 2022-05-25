@@ -5,9 +5,7 @@ A new bungeecord & velocity plugin for writing private messages!
 We use Maven to handle dependencies & building.
 
 ### Requirements
-~ Java 8 JDK
-~ Git
-~ Maven
+To compile the project, you must have: Java 8 JDK, Git and Maven
 
 #### Compiling from source
 ```
