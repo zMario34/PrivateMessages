@@ -36,7 +36,7 @@ public class MessageCommand implements SimpleCommand {
         }
         final Player player = (Player) source;
 
-        if (!player.hasPermission(SettingsConfiguration.COMMAND_MESSAGE_PERMISSION.getString())) {
+        if (!SettingsConfiguration.COMMAND_MESSAGE_PERMISSION.getString().isEmpty() && !player.hasPermission(SettingsConfiguration.COMMAND_MESSAGE_PERMISSION.getString())) {
             player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
             return;
         }

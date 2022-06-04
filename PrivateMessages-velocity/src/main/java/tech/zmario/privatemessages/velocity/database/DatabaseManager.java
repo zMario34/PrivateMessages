@@ -92,7 +92,7 @@ public class DatabaseManager {
 
     public void createPlayer(Player player) {
         plugin.getProxyServer().getScheduler().buildTask(plugin, () -> {
-            try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement("INSERT INTO players_data (uuid, social_spy, toggled_messages) VALUES (?, ?, ?, ?);")) {
+            try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement("INSERT INTO players_data (uuid, social_spy, toggled_messages) VALUES (?, ?, ?);")) {
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setBoolean(2, false);
                 statement.setBoolean(3, false);

@@ -38,7 +38,13 @@ public class IgnoreCommand extends Command implements TabExecutor {
             sender.sendMessage(MessagesConfiguration.NO_CONSOLE.getString());
             return;
         }
+
         ProxiedPlayer player = (ProxiedPlayer) sender;
+
+        if (!SettingsConfiguration.COMMAND_IGNORE_PERMISSION.getString().isEmpty() && !player.hasPermission(SettingsConfiguration.COMMAND_IGNORE_PERMISSION.getString())) {
+            player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
+            return;
+        }
 
         if (args.length > 0) {
             Optional<SubCommand> subCommand = Optional.ofNullable(subCommands.get(args[0].toLowerCase()));

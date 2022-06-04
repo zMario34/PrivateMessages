@@ -39,7 +39,13 @@ public class MessageCommand extends Command implements TabExecutor {
             sender.sendMessage(MessagesConfiguration.NO_CONSOLE.getString());
             return;
         }
+
         final ProxiedPlayer player = (ProxiedPlayer) sender;
+
+        if (!SettingsConfiguration.COMMAND_MESSAGE_PERMISSION.getString().isEmpty() && !player.hasPermission(SettingsConfiguration.COMMAND_MESSAGE_PERMISSION.getString())) {
+            player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
+            return;
+        }
 
         if (!player.hasPermission(SettingsConfiguration.COMMAND_MESSAGE_PERMISSION.getString())) {
             player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());

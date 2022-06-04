@@ -22,12 +22,14 @@ public class SocialSpyCommand extends Command {
             sender.sendMessage(MessagesConfiguration.NO_CONSOLE.getString());
             return;
         }
+
         final ProxiedPlayer player = (ProxiedPlayer) sender;
 
         if (!player.hasPermission(SettingsConfiguration.COMMAND_SOCIAL_SPY_PERMISSION.getString())) {
             player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
             return;
         }
+
         if (plugin.getStorage().hasSocialSpy(player.getUniqueId())) {
             plugin.getStorage().setSocialSpy(player.getUniqueId(), false);
             player.sendMessage(MessagesConfiguration.SOCIAL_SPY_OFF.getString());

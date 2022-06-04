@@ -28,6 +28,7 @@ public class SocialSpyCommand implements SimpleCommand {
             player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
             return;
         }
+
         if (plugin.getStorage().hasSocialSpy(player.getUniqueId())) {
             plugin.getStorage().setSocialSpy(player.getUniqueId(), false);
             player.sendMessage(MessagesConfiguration.SOCIAL_SPY_OFF.getString());

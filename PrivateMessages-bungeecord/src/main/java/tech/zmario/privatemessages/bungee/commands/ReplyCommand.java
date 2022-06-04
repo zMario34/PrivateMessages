@@ -27,6 +27,12 @@ public class ReplyCommand extends Command {
         }
 
         final ProxiedPlayer player = (ProxiedPlayer) sender;
+
+        if (!SettingsConfiguration.COMMAND_REPLY_PERMISSION.getString().isEmpty() && !player.hasPermission(SettingsConfiguration.COMMAND_REPLY_PERMISSION.getString())) {
+            player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
+            return;
+        }
+
         final DataStorage data = plugin.getStorage();
 
         if (!data.getWaitingReply().containsKey(player.getUniqueId())) {

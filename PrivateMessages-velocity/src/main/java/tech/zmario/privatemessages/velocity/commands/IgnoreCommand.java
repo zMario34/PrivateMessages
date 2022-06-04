@@ -34,8 +34,14 @@ public class IgnoreCommand implements SimpleCommand {
             source.sendMessage(MessagesConfiguration.NO_CONSOLE.getString());
             return;
         }
+
         Player player = (Player) source;
         String[] args = invocation.arguments();
+
+        if (!SettingsConfiguration.COMMAND_IGNORE_PERMISSION.getString().isEmpty() && !player.hasPermission(SettingsConfiguration.COMMAND_IGNORE_PERMISSION.getString())) {
+            player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
+            return;
+        }
 
         if (args.length > 0) {
             Optional<SubCommand> subCommand = Optional.ofNullable(subCommands.get(args[0].toLowerCase()));

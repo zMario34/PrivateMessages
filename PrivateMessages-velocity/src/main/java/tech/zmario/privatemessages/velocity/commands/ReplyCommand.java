@@ -7,6 +7,7 @@ import litebans.api.Database;
 import tech.zmario.privatemessages.common.storage.DataStorage;
 import tech.zmario.privatemessages.velocity.PrivateMessagesVelocity;
 import tech.zmario.privatemessages.velocity.enums.MessagesConfiguration;
+import tech.zmario.privatemessages.velocity.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.velocity.utils.Utils;
 
 import java.util.Optional;
@@ -27,6 +28,12 @@ public class ReplyCommand implements SimpleCommand {
         }
 
         final Player player = (Player) source;
+
+        if (!SettingsConfiguration.COMMAND_REPLY_PERMISSION.getString().isEmpty() && !player.hasPermission(SettingsConfiguration.COMMAND_REPLY_PERMISSION.getString())) {
+            player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
+            return;
+        }
+
         final DataStorage data = plugin.getStorage();
 
         if (!data.getWaitingReply().containsKey(player.getUniqueId())) {

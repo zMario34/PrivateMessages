@@ -2,6 +2,7 @@ package tech.zmario.privatemessages.velocity;
 
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -58,6 +59,16 @@ public class PrivateMessagesVelocity {
         setupInstances();
         registerListeners(new BaseListeners(this));
         registerCommands();
+    }
+
+    @Subscribe
+    public void onProxyShutdown(ProxyShutdownEvent event) {
+        databaseManager.close();
+        databaseManager = null;
+        storage = null;
+        libraryManager = null;
+        configManager = null;
+        instance = null;
     }
 
     private void setupConfigurations(PluginDescription pluginDescription) {
