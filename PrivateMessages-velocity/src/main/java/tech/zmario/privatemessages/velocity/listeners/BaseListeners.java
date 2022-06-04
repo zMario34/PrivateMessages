@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import tech.zmario.privatemessages.common.objects.GamePlayer;
 import tech.zmario.privatemessages.velocity.PrivateMessagesVelocity;
 
+import java.util.concurrent.TimeUnit;
+
 @RequiredArgsConstructor
 public class BaseListeners {
 
@@ -17,6 +19,7 @@ public class BaseListeners {
         Player player = e.getPlayer();
 
         plugin.getProxyServer().getScheduler().buildTask(plugin, () -> {
+            if (!player.isActive()) return;
 
             if (!plugin.getDatabaseManager().isPresent(player)) {
                 plugin.getDatabaseManager().createPlayer(player);
@@ -28,6 +31,6 @@ public class BaseListeners {
             gamePlayer.setSocialSpyEnabled(plugin.getDatabaseManager().getSocialSpyStatus(player));
 
             plugin.getStorage().getGamePlayers().put(player.getUniqueId(), gamePlayer);
-        }).schedule();
+        }).delay(1L, TimeUnit.SECONDS).schedule();
     }
 }

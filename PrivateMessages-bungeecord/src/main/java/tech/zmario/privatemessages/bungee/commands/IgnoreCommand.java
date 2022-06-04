@@ -1,10 +1,13 @@
 package tech.zmario.privatemessages.bungee.commands;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.TabExecutor;
 import tech.zmario.privatemessages.bungee.PrivateMessagesBungee;
 import tech.zmario.privatemessages.bungee.commands.interfaces.SubCommand;
 import tech.zmario.privatemessages.bungee.commands.subcommands.AddSubCommand;
@@ -15,8 +18,9 @@ import tech.zmario.privatemessages.bungee.enums.SettingsConfiguration;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class IgnoreCommand extends Command {
+public class IgnoreCommand extends Command implements TabExecutor {
 
     private final Map<String, SubCommand> subCommands;
 
@@ -55,5 +59,13 @@ public class IgnoreCommand extends Command {
 
         for (String string : MessagesConfiguration.IGNORE_USAGE.getStringList())
             player.sendMessage(TextComponent.fromLegacyText(string));
+    }
+
+    @Override
+    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+        if (args.length == 3) {
+            return ProxyServer.getInstance().getPlayers().stream().map(ProxiedPlayer::getName).collect(Collectors.toSet());
+        }
+        return ImmutableSet.of();
     }
 }

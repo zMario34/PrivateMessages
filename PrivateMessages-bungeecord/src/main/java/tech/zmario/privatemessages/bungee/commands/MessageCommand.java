@@ -1,9 +1,12 @@
 package tech.zmario.privatemessages.bungee.commands;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.api.plugin.TabExecutor;
 import tech.zmario.privatemessages.bungee.PrivateMessagesBungee;
 import tech.zmario.privatemessages.bungee.enums.MessagesConfiguration;
 import tech.zmario.privatemessages.bungee.enums.SettingsConfiguration;
@@ -11,8 +14,11 @@ import tech.zmario.privatemessages.bungee.utils.Utils;
 import tech.zmario.privatemessages.common.storage.DataStorage;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class MessageCommand extends Command {
+public class MessageCommand extends Command implements TabExecutor {
 
     private final PrivateMessagesBungee plugin;
 
@@ -88,5 +94,13 @@ public class MessageCommand extends Command {
         target.sendMessage(MessagesConfiguration.MESSAGE_TARGET_FORMAT.getString("%target%:" + player.getName(), "%message%:" + message, "%player_server%:" + player.getServer().getInfo().getName(), "%target_server%:" + target.getServer().getInfo().getName()));
 
         Utils.sendSpyMessage(player, data, target, message, plugin);
+    }
+
+    @Override
+    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+        if (args.length == 2) {
+            return ProxyServer.getInstance().getPlayers().stream().map(ProxiedPlayer::getName).collect(Collectors.toSet());
+        }
+        return ImmutableSet.of();
     }
 }
