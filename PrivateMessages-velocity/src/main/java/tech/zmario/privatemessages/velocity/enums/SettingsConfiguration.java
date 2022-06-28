@@ -8,6 +8,7 @@ public enum SettingsConfiguration {
 
     // MySQL
     MYSQL_ENABLED("mysql.enabled"),
+    MYSQL_DRIVER("mysql.driver"),
     MYSQL_HOST("mysql.host"),
     MYSQL_PORT("mysql.port"),
     MYSQL_USERNAME("mysql.username"),

@@ -21,7 +21,7 @@ public class Utils {
                 online.hasPermission(SettingsConfiguration.COMMAND_RELOAD_PERMISSION.getString()) &&
                 data.getGamePlayers().get(online.getUniqueId()).isSocialSpyEnabled()).forEach(online ->
                 online.sendMessage(MessagesConfiguration.SOCIAL_SPY_FORMAT.getString(
-                        "%target%:" + player.getUsername(), "%player%:" + player.getUsername(), "%message%:" + message,
+                        "%target%:" + target.getUsername(), "%player%:" + player.getUsername(), "%message%:" + message,
                         "%player_server%:" + player.getCurrentServer().get().getServerInfo().getName(), "%target_server%:" + target.getCurrentServer().get().getServerInfo().getName())));
     }
 }

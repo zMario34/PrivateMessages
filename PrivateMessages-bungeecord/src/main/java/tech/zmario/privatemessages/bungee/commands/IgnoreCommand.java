@@ -50,7 +50,10 @@ public class IgnoreCommand extends Command implements TabExecutor {
             Optional<SubCommand> subCommand = Optional.ofNullable(subCommands.get(args[0].toLowerCase()));
 
             if (!subCommand.isPresent()) {
-                player.sendMessage(MessagesConfiguration.IGNORE_USAGE.getString());
+                for (String string : MessagesConfiguration.IGNORE_USAGE.getStringList()) {
+                    player.sendMessage(TextComponent.fromLegacyText(string));
+                }
+
                 return;
             }
 

@@ -52,7 +52,7 @@ public class MessageCommand extends Command implements TabExecutor {
             return;
         }
 
-        if (args.length == 0) {
+        if (args.length < 2) {
             player.sendMessage(MessagesConfiguration.MESSAGE_USAGE.getString());
             return;
         }
@@ -93,6 +93,7 @@ public class MessageCommand extends Command implements TabExecutor {
             player.sendMessage(MessagesConfiguration.MESSAGE_SELF_DISABLED.getString());
             return;
         }
+
         String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         data.getWaitingReply().put(target.getUniqueId(), player.getUniqueId());
 
@@ -104,9 +105,10 @@ public class MessageCommand extends Command implements TabExecutor {
 
     @Override
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-        if (args.length == 2) {
+        if (args.length == 1) {
             return ProxyServer.getInstance().getPlayers().stream().map(ProxiedPlayer::getName).collect(Collectors.toSet());
         }
+
         return ImmutableSet.of();
     }
 }

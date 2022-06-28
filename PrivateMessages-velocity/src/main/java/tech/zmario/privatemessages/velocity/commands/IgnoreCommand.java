@@ -47,7 +47,9 @@ public class IgnoreCommand implements SimpleCommand {
             Optional<SubCommand> subCommand = Optional.ofNullable(subCommands.get(args[0].toLowerCase()));
 
             if (!subCommand.isPresent()) {
-                player.sendMessage(MessagesConfiguration.IGNORE_USAGE.getString());
+                for (Component string : MessagesConfiguration.IGNORE_USAGE.getStringList()) {
+                    player.sendMessage(string);
+                }
                 return;
             }
 
@@ -60,7 +62,8 @@ public class IgnoreCommand implements SimpleCommand {
             return;
         }
 
-        for (Component string : MessagesConfiguration.IGNORE_USAGE.getStringList())
+        for (Component string : MessagesConfiguration.IGNORE_USAGE.getStringList()) {
             player.sendMessage(string);
+        }
     }
 }

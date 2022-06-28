@@ -41,7 +41,7 @@ public class MessageCommand implements SimpleCommand {
             return;
         }
 
-        if (args.length == 0) {
+        if (args.length < 2) {
             player.sendMessage(MessagesConfiguration.MESSAGE_USAGE.getString());
             return;
         }

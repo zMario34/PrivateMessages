@@ -18,7 +18,6 @@ public class BaseListeners implements Listener {
         ProxiedPlayer player = e.getPlayer();
 
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {
-
             if (!plugin.getDatabaseManager().isPresent(player)) {
                 plugin.getDatabaseManager().createPlayer(player);
             }

@@ -38,8 +38,8 @@ public class DatabaseManager {
 
             HikariConfig config = new HikariConfig();
 
-            config.setJdbcUrl("jdbc:mysql://" + SettingsConfiguration.MYSQL_HOST.getString() + ":" + SettingsConfiguration.MYSQL_PORT.getString() + "/" + SettingsConfiguration.MYSQL_DATABASE.getString());
-            config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            config.setJdbcUrl("jdbc:mysql://" + SettingsConfiguration.MYSQL_HOST.getString() + ":" + SettingsConfiguration.MYSQL_PORT.getInt() + "/" + SettingsConfiguration.MYSQL_DATABASE.getString());
+            config.setDriverClassName(SettingsConfiguration.MYSQL_DRIVER.getString());
             config.setUsername(SettingsConfiguration.MYSQL_USERNAME.getString());
             config.setPassword(SettingsConfiguration.MYSQL_PASSWORD.getString());
             config.setPoolName("PrivateMessages");

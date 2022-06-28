@@ -92,6 +92,4 @@ public class ReplyCommand implements SimpleCommand {
 
         Utils.sendSpyMessage(player, data, target, message, plugin);
     }
-
-
 }

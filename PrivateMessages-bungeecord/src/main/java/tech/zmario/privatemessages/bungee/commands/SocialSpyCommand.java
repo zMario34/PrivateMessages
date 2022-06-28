@@ -37,6 +37,7 @@ public class SocialSpyCommand extends Command {
             plugin.getStorage().setSocialSpy(player.getUniqueId(), true);
             player.sendMessage(MessagesConfiguration.SOCIAL_SPY_ON.getString());
         }
+
         plugin.getDatabaseManager().updateSocialSpy(player, plugin.getStorage().hasSocialSpy(player.getUniqueId()));
     }
 }

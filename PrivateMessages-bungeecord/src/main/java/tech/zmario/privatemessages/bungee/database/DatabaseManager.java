@@ -38,8 +38,9 @@ public class DatabaseManager {
 
             HikariConfig config = new HikariConfig();
 
-            config.setJdbcUrl("jdbc:mysql://" + SettingsConfiguration.MYSQL_HOST.getString() + ":" + SettingsConfiguration.MYSQL_PORT.getString() + "/" + SettingsConfiguration.MYSQL_DATABASE.getString());
-            config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            config.setJdbcUrl("jdbc:mysql://" + SettingsConfiguration.MYSQL_HOST.getString() + ":" +
+                    SettingsConfiguration.MYSQL_PORT.getInt() + "/" + SettingsConfiguration.MYSQL_DATABASE.getString());
+            config.setDriverClassName(SettingsConfiguration.MYSQL_DRIVER.getString());
             config.setUsername(SettingsConfiguration.MYSQL_USERNAME.getString());
             config.setPassword(SettingsConfiguration.MYSQL_PASSWORD.getString());
             config.setPoolName("PrivateMessages");
@@ -70,7 +71,8 @@ public class DatabaseManager {
 
     public boolean isPresent(ProxiedPlayer player) {
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM players_data WHERE uuid = ?")) {
+            try (Connection connection = getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM players_data WHERE uuid = ?")) {
                 preparedStatement.setString(1, player.getUniqueId().toString());
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -94,7 +96,8 @@ public class DatabaseManager {
 
     public void createPlayer(ProxiedPlayer player) {
         plugin.getProxy().getScheduler().runAsync(plugin, () -> {
-            try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement("INSERT INTO players_data (uuid, social_spy, toggled_messages) VALUES (?, ?, ?);")) {
+            try (Connection connection = getConnection();
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO players_data (uuid, social_spy, toggled_messages) VALUES (?, ?, ?);")) {
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setBoolean(2, false);
                 statement.setBoolean(3, false);
@@ -190,7 +193,8 @@ public class DatabaseManager {
 
     public boolean getToggledStatus(ProxiedPlayer player) {
         CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("SELECT toggled_messages FROM players_data WHERE uuid = ?")) {
+            try (Connection connection = getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT toggled_messages FROM players_data WHERE uuid = ?")) {
                 preparedStatement.setString(1, player.getUniqueId().toString());
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
