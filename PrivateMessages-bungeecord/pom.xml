@@ -7,7 +7,7 @@
     <parent>
         <groupId>tech.zmario</groupId>
         <artifactId>PrivateMessages</artifactId>
-        <version>2.0-BETA</version>
+        <version>2.1</version>
     </parent>
 
     <artifactId>PrivateMessages-bungeecord</artifactId>
@@ -33,7 +33,19 @@
                     <relocations>
                         <relocation>
                             <pattern>net.byteflux.libby</pattern>
-                            <shadedPattern>tech.zmario.privatemessages.bungee.libby</shadedPattern>
+                            <shadedPattern>tech.zmario.privatemessages.bungee.libs.libby</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.kyori</pattern>
+                            <shadedPattern>tech.zmario.privatemessages.bungee.libs.kyori</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.intellij.lang.annotations</pattern>
+                            <shadedPattern>tech.zmario.privatemessages.bungee.libs.annotations</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains.annotations</pattern>
+                            <shadedPattern>tech.zmario.privatemessages.bungee.libs.annotations</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -62,9 +74,21 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-platform-bungeecord</artifactId>
+            <version>4.1.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>net.byteflux</groupId>
             <artifactId>libby-bungee</artifactId>
             <version>1.1.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-api</artifactId>
+            <version>4.11.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

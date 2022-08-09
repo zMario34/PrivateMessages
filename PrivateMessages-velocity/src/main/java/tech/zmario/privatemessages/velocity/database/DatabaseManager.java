@@ -21,24 +21,19 @@ public class DatabaseManager {
     private HikariDataSource dataSource;
     private Connection connection;
 
-    public DatabaseManager(PrivateMessagesVelocity plugin, boolean mysql) {
+    public DatabaseManager(PrivateMessagesVelocity plugin, boolean useMySql) {
         this.plugin = plugin;
 
-        setup(mysql);
+        setup(useMySql);
         makeTables();
     }
 
-    private void setup(boolean mysql) {
-        if (mysql) {
-            Library hikariCp = Library.builder().groupId("com{}zaxxer").artifactId("HikariCP").version("4.0.3").build();
-            Library mysqlConnector = Library.builder().groupId("mysql").artifactId("mysql-connector-java").version("8.0.19").build();
-
-            plugin.getLibraryManager().loadLibrary(hikariCp);
-            plugin.getLibraryManager().loadLibrary(mysqlConnector);
-
+    private void setup(boolean useMySql) {
+        if (useMySql) {
             HikariConfig config = new HikariConfig();
 
-            config.setJdbcUrl("jdbc:mysql://" + SettingsConfiguration.MYSQL_HOST.getString() + ":" + SettingsConfiguration.MYSQL_PORT.getInt() + "/" + SettingsConfiguration.MYSQL_DATABASE.getString());
+            config.setJdbcUrl("jdbc:mysql://" + SettingsConfiguration.MYSQL_HOST.getString() + ":" +
+                    SettingsConfiguration.MYSQL_PORT.getInt() + "/" + SettingsConfiguration.MYSQL_DATABASE.getString() + "?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC");
             config.setDriverClassName(SettingsConfiguration.MYSQL_DRIVER.getString());
             config.setUsername(SettingsConfiguration.MYSQL_USERNAME.getString());
             config.setPassword(SettingsConfiguration.MYSQL_PASSWORD.getString());
@@ -46,9 +41,6 @@ public class DatabaseManager {
 
             dataSource = new HikariDataSource(config);
         } else {
-            Library sqLite = Library.builder().groupId("org{}xerial").artifactId("sqlite-jdbc").version("3.36.0.3").build();
-
-            plugin.getLibraryManager().loadLibrary(sqLite);
             connection = getConnection();
         }
     }

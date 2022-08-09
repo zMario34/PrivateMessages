@@ -1,7 +1,7 @@
 package tech.zmario.privatemessages.bungee.enums;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import tech.zmario.privatemessages.bungee.PrivateMessagesBungee;
 import tech.zmario.privatemessages.bungee.utils.Utils;
 
@@ -71,16 +71,17 @@ public enum MessagesConfiguration {
         this.path = path;
     }
 
-    public BaseComponent[] getString(String... replaces) {
-        String message = Utils.colorize(instance.getMessages().getString(path));
-        for (String s : replaces) {
-            String[] replace = s.split(":");
+    public Component getString(String[]... replaces) {
+        String message = instance.getMessages().getString(path);
+
+        for (String[] replace : replaces) {
             message = message.replace(replace[0], replace[1]);
         }
-        return TextComponent.fromLegacyText(message);
+
+        return Utils.colorize(message);
     }
 
-    public List<String> getStringList() {
+    public List<Component> getStringList() {
         return instance.getMessages().getStringList(path).stream().map(Utils::colorize).collect(Collectors.toList());
     }
 }

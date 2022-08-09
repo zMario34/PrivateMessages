@@ -24,6 +24,7 @@ public class ReplyCommand implements SimpleCommand {
     public void execute(Invocation invocation) {
         CommandSource source = invocation.source();
         if (!(source instanceof Player)) {
+            source.sendMessage(MessagesConfiguration.NO_CONSOLE.getString());
             return;
         }
 
@@ -57,7 +58,7 @@ public class ReplyCommand implements SimpleCommand {
         final Player target = targetOptional.get();
 
         if (plugin.getProxyServer().getPluginManager().getPlugin("LiteBans").isPresent() && Database.get().isPlayerMuted(player.getUniqueId(), null)) {
-            player.sendMessage(MessagesConfiguration.REPLY_LITEBANS_TARGET_MUTED.getString("%target%:" + target.getUsername()));
+            player.sendMessage(MessagesConfiguration.REPLY_LITEBANS_TARGET_MUTED.getString(new String[]{"%target%", target.getUsername()}));
             return;
         }
 
@@ -68,7 +69,7 @@ public class ReplyCommand implements SimpleCommand {
         }
 
         if (data.hasIgnored(target.getUniqueId(), player.getUsername())) {
-            player.sendMessage(MessagesConfiguration.REPLY_TARGET_IGNORED.getString("%target%:" + target.getUsername()));
+            player.sendMessage(MessagesConfiguration.REPLY_TARGET_IGNORED.getString(new String[]{"%target%", target.getUsername()}));
             data.getWaitingReply().remove(player.getUniqueId());
             return;
         }
@@ -80,15 +81,25 @@ public class ReplyCommand implements SimpleCommand {
         }
 
         if (data.hasMessagesToggled(target.getUniqueId())) {
-            player.sendMessage(MessagesConfiguration.REPLY_MESSAGES_DISABLED_TARGET.getString("%target%:" + target.getUsername()));
+            player.sendMessage(MessagesConfiguration.REPLY_MESSAGES_DISABLED_TARGET.getString(new String[]{"%target%", target.getUsername()}));
             data.getWaitingReply().remove(player.getUniqueId());
             return;
         }
         String message = String.join(" ", args);
         data.getWaitingReply().put(target.getUniqueId(), player.getUniqueId());
 
-        player.sendMessage(MessagesConfiguration.REPLY_SENDER_FORMAT.getString("%target%:" + target.getUsername(), "%message%:" + message, "%player_server%:" + player.getCurrentServer().get().getServerInfo().getName(), "%target_server%:" + target.getCurrentServer().get().getServerInfo().getName()));
-        target.sendMessage(MessagesConfiguration.REPLY_TARGET_FORMAT.getString("%target%:" + player.getUsername(), "%message%:" + message, "%player_server%:" + player.getCurrentServer().get().getServerInfo().getName(), "%target_server%:" + target.getCurrentServer().get().getServerInfo().getName()));
+        player.sendMessage(MessagesConfiguration.REPLY_SENDER_FORMAT.getString(
+
+                new String[]{"%target%", target.getUsername()},
+                new String[]{"%message%", message},
+                new String[]{"%player_server%", Utils.getServerDisplay(player.getCurrentServer().get().getServerInfo(), plugin.getConfig())},
+                new String[]{"%target_server%", Utils.getServerDisplay(target.getCurrentServer().get().getServerInfo(), plugin.getConfig())}));
+
+        target.sendMessage(MessagesConfiguration.REPLY_TARGET_FORMAT.getString(
+                new String[]{"%target%", player.getUsername()},
+                new String[]{"%message%", message},
+                new String[]{"%player_server%", Utils.getServerDisplay(target.getCurrentServer().get().getServerInfo(), plugin.getConfig())},
+                new String[]{"%target_server%", Utils.getServerDisplay(player.getCurrentServer().get().getServerInfo(), plugin.getConfig())}));
 
         Utils.sendSpyMessage(player, data, target, message, plugin);
     }

@@ -1,5 +1,6 @@
 package tech.zmario.privatemessages.bungee.commands;
 
+import net.kyori.adventure.audience.Audience;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
@@ -18,24 +19,26 @@ public class SocialSpyCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
+        Audience audience = plugin.getAdventure().sender(sender);
+
         if (!(sender instanceof ProxiedPlayer)) {
-            sender.sendMessage(MessagesConfiguration.NO_CONSOLE.getString());
+            audience.sendMessage(MessagesConfiguration.NO_CONSOLE.getString());
             return;
         }
 
-        final ProxiedPlayer player = (ProxiedPlayer) sender;
+        ProxiedPlayer player = (ProxiedPlayer) sender;
 
         if (!player.hasPermission(SettingsConfiguration.COMMAND_SOCIAL_SPY_PERMISSION.getString())) {
-            player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
+            audience.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
             return;
         }
 
         if (plugin.getStorage().hasSocialSpy(player.getUniqueId())) {
             plugin.getStorage().setSocialSpy(player.getUniqueId(), false);
-            player.sendMessage(MessagesConfiguration.SOCIAL_SPY_OFF.getString());
+            audience.sendMessage(MessagesConfiguration.SOCIAL_SPY_OFF.getString());
         } else {
             plugin.getStorage().setSocialSpy(player.getUniqueId(), true);
-            player.sendMessage(MessagesConfiguration.SOCIAL_SPY_ON.getString());
+            audience.sendMessage(MessagesConfiguration.SOCIAL_SPY_ON.getString());
         }
 
         plugin.getDatabaseManager().updateSocialSpy(player, plugin.getStorage().hasSocialSpy(player.getUniqueId()));

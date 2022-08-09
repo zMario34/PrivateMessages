@@ -31,11 +31,14 @@ public class SocialSpyCommand implements SimpleCommand {
 
         if (plugin.getStorage().hasSocialSpy(player.getUniqueId())) {
             plugin.getStorage().setSocialSpy(player.getUniqueId(), false);
+
             player.sendMessage(MessagesConfiguration.SOCIAL_SPY_OFF.getString());
         } else {
             plugin.getStorage().setSocialSpy(player.getUniqueId(), true);
+
             player.sendMessage(MessagesConfiguration.SOCIAL_SPY_ON.getString());
         }
+
         plugin.getDatabaseManager().updateSocialSpy(player, plugin.getStorage().hasSocialSpy(player.getUniqueId()));
     }
 }

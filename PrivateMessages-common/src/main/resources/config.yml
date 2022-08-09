@@ -53,3 +53,6 @@ commands:
     permission: 'privatemessages.command.socialspy'
     aliases:
       - social-spy
+servers-configuration:
+  lobby:
+    display-name: '&cLobby'

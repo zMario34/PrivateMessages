@@ -1,6 +1,7 @@
 package tech.zmario.privatemessages.bungee.commands;
 
 import litebans.api.Database;
+import net.kyori.adventure.audience.Audience;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -22,67 +23,79 @@ public class ReplyCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
+        Audience audience = plugin.getAdventure().sender(sender);
+
         if (!(sender instanceof ProxiedPlayer)) {
+            audience.sendMessage(MessagesConfiguration.NO_CONSOLE.getString());
             return;
         }
-
-        final ProxiedPlayer player = (ProxiedPlayer) sender;
+        ProxiedPlayer player = (ProxiedPlayer) sender;
 
         if (!SettingsConfiguration.COMMAND_REPLY_PERMISSION.getString().isEmpty() && !player.hasPermission(SettingsConfiguration.COMMAND_REPLY_PERMISSION.getString())) {
-            player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
+            audience.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
             return;
         }
-
-        final DataStorage data = plugin.getStorage();
+        DataStorage data = plugin.getStorage();
 
         if (!data.getWaitingReply().containsKey(player.getUniqueId())) {
-            player.sendMessage(MessagesConfiguration.REPLY_NOT_IN_CONVERSATION.getString());
-            return;
-        }
-        if (args.length == 0) {
-            player.sendMessage(MessagesConfiguration.REPLY_USAGE.getString());
+            audience.sendMessage(MessagesConfiguration.REPLY_NOT_IN_CONVERSATION.getString());
             return;
         }
 
-        final ProxiedPlayer target = ProxyServer.getInstance().getPlayer(data.getWaitingReply().get(player.getUniqueId()));
+        if (args.length == 0) {
+            audience.sendMessage(MessagesConfiguration.REPLY_USAGE.getString());
+            return;
+        }
+        ProxiedPlayer target = ProxyServer.getInstance().getPlayer(data.getWaitingReply().get(player.getUniqueId()));
+
         if (target == null) {
-            player.sendMessage(MessagesConfiguration.REPLY_PLAYER_NOT_ONLINE.getString());
+            audience.sendMessage(MessagesConfiguration.REPLY_PLAYER_NOT_ONLINE.getString());
             return;
         }
 
         if (plugin.getProxy().getPluginManager().getPlugin("LiteBans") != null && Database.get().isPlayerMuted(player.getUniqueId(), null)) {
-            player.sendMessage(MessagesConfiguration.REPLY_LITEBANS_TARGET_MUTED.getString("%target%:" + target.getName()));
+            audience.sendMessage(MessagesConfiguration.REPLY_LITEBANS_TARGET_MUTED.getString(new String[]{"%target%", target.getName()}));
             return;
         }
 
         if (data.hasIgnored(player.getUniqueId(), target.getName())) {
-            player.sendMessage(MessagesConfiguration.REPLY_PLAYER_IGNORED.getString());
+            audience.sendMessage(MessagesConfiguration.REPLY_PLAYER_IGNORED.getString());
             data.getWaitingReply().remove(player.getUniqueId());
             return;
         }
 
         if (data.hasIgnored(target.getUniqueId(), player.getName())) {
-            player.sendMessage(MessagesConfiguration.REPLY_TARGET_IGNORED.getString("%target%:" + target.getName()));
+            audience.sendMessage(MessagesConfiguration.REPLY_TARGET_IGNORED.getString(new String[]{"%target%", target.getName()}));
             data.getWaitingReply().remove(player.getUniqueId());
             return;
         }
 
         if (data.hasMessagesToggled(player.getUniqueId())) {
-            player.sendMessage(MessagesConfiguration.REPLY_MESSAGES_DISABLED.getString());
+            audience.sendMessage(MessagesConfiguration.REPLY_MESSAGES_DISABLED.getString());
             data.getWaitingReply().remove(player.getUniqueId());
             return;
         }
 
         if (data.hasMessagesToggled(target.getUniqueId())) {
-            player.sendMessage(MessagesConfiguration.REPLY_MESSAGES_DISABLED_TARGET.getString("%target%:" + target.getName()));
+            audience.sendMessage(MessagesConfiguration.REPLY_MESSAGES_DISABLED_TARGET.getString(new String[]{"%target%", target.getName()}));
             data.getWaitingReply().remove(player.getUniqueId());
             return;
         }
+        Audience targetAudience = plugin.getAdventure().sender(target);
         String message = String.join(" ", args);
+
         data.getWaitingReply().put(target.getUniqueId(), player.getUniqueId());
 
-        player.sendMessage(MessagesConfiguration.REPLY_SENDER_FORMAT.getString("%target%:" + target.getName(), "%message%:" + message, "%player_server%:" + player.getServer().getInfo().getName(), "%target_server%:" + target.getServer().getInfo().getName()));
-        target.sendMessage(MessagesConfiguration.REPLY_TARGET_FORMAT.getString("%target%:" + player.getName(), "%message%:" + message, "%player_server%:" + player.getServer().getInfo().getName(), "%target_server%:" + target.getServer().getInfo().getName()));
+        audience.sendMessage(MessagesConfiguration.REPLY_SENDER_FORMAT.getString(
+                new String[]{"%target%", target.getName()},
+                new String[]{"%message%", message},
+                new String[]{"%player_server%", Utils.getServerDisplay(player.getServer().getInfo(), plugin.getConfig())},
+                new String[]{"%target_server%", Utils.getServerDisplay(target.getServer().getInfo(), plugin.getConfig())}));
+        targetAudience.sendMessage(MessagesConfiguration.REPLY_TARGET_FORMAT.getString(
+                new String[]{"%target%", player.getName()},
+                new String[]{"%message%", message},
+                new String[]{"%player_server%", Utils.getServerDisplay(target.getServer().getInfo(), plugin.getConfig())},
+                new String[]{"%target_server%", Utils.getServerDisplay(player.getServer().getInfo(), plugin.getConfig())}));
 
         Utils.sendSpyMessage(player, data, target, message, plugin);
     }

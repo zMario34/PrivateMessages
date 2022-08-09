@@ -2,6 +2,8 @@ package tech.zmario.privatemessages.bungee;
 
 import lombok.Getter;
 import net.byteflux.libby.BungeeLibraryManager;
+import net.byteflux.libby.Library;
+import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -22,6 +24,7 @@ public final class PrivateMessagesBungee extends Plugin {
     private BungeeLibraryManager libraryManager;
     private DataStorage storage;
     private DatabaseManager databaseManager;
+    private BungeeAudiences adventure;
 
     @Override
     public void onEnable() {
@@ -53,9 +56,30 @@ public final class PrivateMessagesBungee extends Plugin {
     private void setupInstances() {
         instance = this;
         storage = new DataStorage();
+
         libraryManager = new BungeeLibraryManager(this);
         libraryManager.addMavenCentral();
-        databaseManager = new DatabaseManager(this, SettingsConfiguration.MYSQL_ENABLED.getBoolean());
+
+        boolean useMySql = SettingsConfiguration.MYSQL_ENABLED.getBoolean();
+
+        loadLibraries(useMySql);
+
+        databaseManager = new DatabaseManager(this, useMySql);
+        adventure = BungeeAudiences.create(this);
+    }
+
+    private void loadLibraries(boolean useMySql) {
+        if (useMySql) {
+            Library hikariCp = Library.builder().groupId("com{}zaxxer").artifactId("HikariCP").version("4.0.3").build();
+            Library mysqlConnector = Library.builder().groupId("mysql").artifactId("mysql-connector-java").version("8.0.19").build();
+
+            libraryManager.loadLibrary(hikariCp);
+            libraryManager.loadLibrary(mysqlConnector);
+        } else {
+            Library sqLite = Library.builder().groupId("org{}xerial").artifactId("sqlite-jdbc").version("3.36.0.3").build();
+
+            libraryManager.loadLibrary(sqLite);
+        }
     }
 
     @Override
@@ -65,6 +89,11 @@ public final class PrivateMessagesBungee extends Plugin {
         databaseManager.close();
         databaseManager = null;
         instance = null;
+
+        if (adventure != null) {
+            adventure.close();
+            adventure = null;
+        }
     }
 
     public Configuration getConfig() {

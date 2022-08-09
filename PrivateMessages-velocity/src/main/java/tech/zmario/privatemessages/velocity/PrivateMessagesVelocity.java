@@ -8,6 +8,7 @@ import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.proxy.ProxyServer;
 import lombok.Getter;
 import lombok.Setter;
+import net.byteflux.libby.Library;
 import net.byteflux.libby.VelocityLibraryManager;
 import org.slf4j.Logger;
 import tech.zmario.privatemessages.common.configuration.Configuration;
@@ -24,7 +25,7 @@ import java.io.File;
 @Plugin(
         id = "privatemessages",
         name = "PrivateMessages",
-        version = "2.0-BETA",
+        version = "2.1",
         authors = {"zMario"},
         description = "A plugin that allows you to send private messages to other players."
 )
@@ -73,6 +74,7 @@ public class PrivateMessagesVelocity {
 
     private void setupConfigurations(PluginDescription pluginDescription) {
         configManager = new ConfigManager(this, pluginDescription);
+
         configManager.create("config.yml");
         configManager.create("messages.yml");
     }
@@ -80,9 +82,15 @@ public class PrivateMessagesVelocity {
     private void setupInstances() {
         instance = this;
         storage = new DataStorage();
+
         libraryManager = new VelocityLibraryManager<>(logger, pluginFolder.toPath(), getProxyServer().getPluginManager(), this);
         libraryManager.addMavenCentral();
-        databaseManager = new DatabaseManager(this, SettingsConfiguration.MYSQL_ENABLED.getBoolean());
+
+        boolean useMySql = SettingsConfiguration.MYSQL_ENABLED.getBoolean();
+
+        loadLibraries(useMySql);
+
+        databaseManager = new DatabaseManager(this, useMySql);
     }
 
     private void registerListeners(Object... listeners) {
@@ -110,6 +118,20 @@ public class PrivateMessagesVelocity {
         proxyServer.getCommandManager().register(proxyServer.getCommandManager().metaBuilder(SettingsConfiguration.COMMAND_SOCIAL_SPY_NAME.getString())
                 .aliases(SettingsConfiguration.COMMAND_SOCIAL_SPY_ALIASES.getStringList().toArray(new String[0]))
                 .build(), new SocialSpyCommand(this));
+    }
+
+    private void loadLibraries(boolean useMySql) {
+        if (useMySql) {
+            Library hikariCp = Library.builder().groupId("com{}zaxxer").artifactId("HikariCP").version("4.0.3").build();
+            Library mysqlConnector = Library.builder().groupId("mysql").artifactId("mysql-connector-java").version("8.0.19").build();
+
+            libraryManager.loadLibrary(hikariCp);
+            libraryManager.loadLibrary(mysqlConnector);
+        } else {
+            Library sqLite = Library.builder().groupId("org{}xerial").artifactId("sqlite-jdbc").version("3.36.0.3").build();
+
+            libraryManager.loadLibrary(sqLite);
+        }
     }
 
     public Configuration getConfig() {

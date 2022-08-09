@@ -52,17 +52,25 @@ public class ListSubCommand implements SubCommand {
         int maxPage = ignoredLists.size() / SettingsConfiguration.COMMAND_IGNORE_LIST_MAX_SIZE.getInt() + 1;
 
         if (page >= maxPage) {
-            player.sendMessage(MessagesConfiguration.IGNORE_LIST_PAGE_NOT_EXIST.getString("%page%:" + (page + 1), "%max-page%:" + maxPage));
+            player.sendMessage(MessagesConfiguration.IGNORE_LIST_PAGE_NOT_EXIST.getString(
+                    new String[]{"%page%", String.valueOf((page + 1))},
+                    new String[]{"%max-page%", String.valueOf(maxPage)}));
             return;
         }
 
-        player.sendMessage(MessagesConfiguration.IGNORE_LIST_HEADER.getString("%page%:" + (page + 1), "%max-page%:" + maxPage));
+        player.sendMessage(MessagesConfiguration.IGNORE_LIST_HEADER.getString(
+                new String[]{"%page%", String.valueOf((page + 1))},
+                new String[]{"%max-page%", String.valueOf(maxPage)}));
 
         for (int i = start; i < end; i++) {
-            player.sendMessage(MessagesConfiguration.IGNORE_LIST_LINE.getString("%index%:" + (i + 1), "%player%:" + ignoredLists.get(i)));
+            player.sendMessage(MessagesConfiguration.IGNORE_LIST_LINE.getString(
+                    new String[]{"%index%", String.valueOf((i + 1))},
+                    new String[]{"%player%", ignoredLists.get(i)}));
         }
 
-        player.sendMessage(MessagesConfiguration.IGNORE_LIST_FOOTER.getString("%page%:" + (page + 1), "%max-page%:" + maxPage));
+        player.sendMessage(MessagesConfiguration.IGNORE_LIST_FOOTER.getString(
+                new String[]{"%page%", String.valueOf((page + 1))},
+                new String[]{"%max-page%", String.valueOf(maxPage)}));
     }
 
     @Override

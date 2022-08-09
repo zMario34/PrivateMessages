@@ -10,13 +10,8 @@ import java.util.UUID;
 @Getter
 public class DataStorage {
 
-    public Map<UUID, UUID> waitingReply;
-    public Map<UUID, GamePlayer> gamePlayers;
-
-    public DataStorage() {
-        waitingReply = Maps.newHashMap();
-        gamePlayers = Maps.newHashMap();
-    }
+    public Map<UUID, UUID> waitingReply = Maps.newHashMap();;
+    public Map<UUID, GamePlayer> gamePlayers = Maps.newHashMap();
 
     public boolean hasIgnored(UUID sender, String targetName) {
         return gamePlayers.get(sender).getIgnoredPlayers().contains(targetName);

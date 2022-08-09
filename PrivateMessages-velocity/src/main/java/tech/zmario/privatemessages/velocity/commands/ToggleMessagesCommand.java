@@ -37,6 +37,7 @@ public class ToggleMessagesCommand implements SimpleCommand {
             plugin.getStorage().setMessagesToggled(player.getUniqueId(), false);
             player.sendMessage(MessagesConfiguration.TOGGLE_MESSAGES_ON.getString());
         }
+
         plugin.getDatabaseManager().updateMessagesToggled(player, plugin.getStorage().hasMessagesToggled(player.getUniqueId()));
     }
 }

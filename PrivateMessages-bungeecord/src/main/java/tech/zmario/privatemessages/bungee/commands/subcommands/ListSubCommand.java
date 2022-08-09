@@ -1,6 +1,7 @@
 package tech.zmario.privatemessages.bungee.commands.subcommands;
 
 import lombok.RequiredArgsConstructor;
+import net.kyori.adventure.audience.Audience;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import tech.zmario.privatemessages.bungee.PrivateMessagesBungee;
@@ -17,9 +18,10 @@ public class ListSubCommand implements SubCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        final ProxiedPlayer player = (ProxiedPlayer) sender;
+        ProxiedPlayer player = (ProxiedPlayer) sender;
+        Audience audience = plugin.getAdventure().player(player);
 
-        final List<String> ignoredLists = plugin.getStorage().getGamePlayers().get(player.getUniqueId()).getIgnoredPlayers();
+        List<String> ignoredLists = plugin.getStorage().getGamePlayers().get(player.getUniqueId()).getIgnoredPlayers();
         int page = 0;
 
         if (args.length == 2) {
@@ -28,17 +30,17 @@ public class ListSubCommand implements SubCommand {
                 page = Integer.parseInt(args[1]) - 1;
 
                 if (page < 0) {
-                    player.sendMessage(MessagesConfiguration.IGNORE_LIST_NOT_A_NUMBER.getString());
+                    audience.sendMessage(MessagesConfiguration.IGNORE_LIST_NOT_A_NUMBER.getString());
                     return;
                 }
             } catch (NumberFormatException e) {
-                player.sendMessage(MessagesConfiguration.IGNORE_LIST_NOT_A_NUMBER.getString());
+                audience.sendMessage(MessagesConfiguration.IGNORE_LIST_NOT_A_NUMBER.getString());
                 return;
             }
         }
 
         if (ignoredLists.isEmpty()) {
-            player.sendMessage(MessagesConfiguration.IGNORE_LIST_EMPTY.getString());
+            audience.sendMessage(MessagesConfiguration.IGNORE_LIST_EMPTY.getString());
             return;
         }
 
@@ -52,17 +54,25 @@ public class ListSubCommand implements SubCommand {
         int maxPage = ignoredLists.size() / SettingsConfiguration.COMMAND_IGNORE_LIST_MAX_SIZE.getInt() + 1;
 
         if (page >= maxPage) {
-            player.sendMessage(MessagesConfiguration.IGNORE_LIST_PAGE_NOT_EXIST.getString("%page%:" + (page + 1), "%max-page%:" + maxPage));
+            audience.sendMessage(MessagesConfiguration.IGNORE_LIST_PAGE_NOT_EXIST.getString(
+                    new String[]{"%page%", String.valueOf((page + 1))},
+                    new String[]{"%max-page%", String.valueOf(maxPage)}));
             return;
         }
 
-        player.sendMessage(MessagesConfiguration.IGNORE_LIST_HEADER.getString("%page%:" + (page + 1), "%max-page%:" + maxPage));
+        audience.sendMessage(MessagesConfiguration.IGNORE_LIST_HEADER.getString(
+                new String[]{"%page%", String.valueOf((page + 1))},
+                new String[]{"%max-page%", String.valueOf(maxPage)}));
 
         for (int i = start; i < end; i++) {
-            player.sendMessage(MessagesConfiguration.IGNORE_LIST_LINE.getString("%index%:" + (i + 1), "%player%:" + ignoredLists.get(i)));
+            audience.sendMessage(MessagesConfiguration.IGNORE_LIST_LINE.getString(
+                    new String[]{"%index%", String.valueOf((i + 1))},
+                    new String[]{"%player%", ignoredLists.get(i)}));
         }
 
-        player.sendMessage(MessagesConfiguration.IGNORE_LIST_FOOTER.getString("%page%:" + (page + 1), "%max-page%:" + maxPage));
+        audience.sendMessage(MessagesConfiguration.IGNORE_LIST_FOOTER.getString(
+                new String[]{"%page%", String.valueOf((page + 1))},
+                new String[]{"%max-page%", String.valueOf(maxPage)}));
     }
 
     @Override

@@ -27,12 +27,13 @@ public class RemoveSubCommand implements SubCommand {
         }
 
         if (!plugin.getStorage().hasIgnored(player.getUniqueId(), args[1].toLowerCase())) {
-            player.sendMessage(MessagesConfiguration.IGNORE_REMOVE_PLAYER_NOT_IGNORED.getString("%target%:" + args[1]));
+            player.sendMessage(MessagesConfiguration.IGNORE_REMOVE_PLAYER_NOT_IGNORED.getString(new String[]{"%target%", args[1]}));
             return;
         }
         plugin.getStorage().updateIgnore(player.getUniqueId(), args[1].toLowerCase(), false);
         plugin.getDatabaseManager().removeIgnore(player, args[1].toLowerCase());
-        player.sendMessage(MessagesConfiguration.IGNORE_REMOVE_PLAYER_REMOVED.getString("%target%:" + args[1]));
+
+        player.sendMessage(MessagesConfiguration.IGNORE_REMOVE_PLAYER_REMOVED.getString(new String[]{"%target%", args[1]}));
     }
 
     @Override

@@ -70,12 +70,13 @@ public enum MessagesConfiguration {
         this.path = path;
     }
 
-    public Component getString(String... replaces) {
+    public Component getString(String[]... replaces) {
         String message = instance.getMessages().getString(path);
-        for (String s : replaces) {
-            String[] replace = s.split(":");
+
+        for (String[] replace : replaces) {
             message = message.replace(replace[0], replace[1]);
         }
+
         return Utils.colorize(message);
     }
 

@@ -2,9 +2,10 @@ package tech.zmario.privatemessages.bungee.commands;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
@@ -22,10 +23,14 @@ import java.util.stream.Collectors;
 
 public class IgnoreCommand extends Command implements TabExecutor {
 
+    private final PrivateMessagesBungee plugin;
     private final Map<String, SubCommand> subCommands;
 
     public IgnoreCommand(PrivateMessagesBungee plugin) {
         super(SettingsConfiguration.COMMAND_IGNORE_NAME.getString(), SettingsConfiguration.COMMAND_IGNORE_PERMISSION.getString(), SettingsConfiguration.COMMAND_IGNORE_ALIASES.getStringList().toArray(new String[0]));
+
+        this.plugin = plugin;
+
         subCommands = Maps.newHashMap();
         subCommands.put(SettingsConfiguration.COMMAND_IGNORE_ADD_NAME.getString(), new AddSubCommand(plugin));
         subCommands.put(SettingsConfiguration.COMMAND_IGNORE_REMOVE_NAME.getString(), new RemoveSubCommand(plugin));
@@ -34,15 +39,17 @@ public class IgnoreCommand extends Command implements TabExecutor {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
+        Audience audience = plugin.getAdventure().sender(sender);
+
         if (!(sender instanceof ProxiedPlayer)) {
-            sender.sendMessage(MessagesConfiguration.NO_CONSOLE.getString());
+            audience.sendMessage(MessagesConfiguration.NO_CONSOLE.getString());
             return;
         }
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
 
         if (!SettingsConfiguration.COMMAND_IGNORE_PERMISSION.getString().isEmpty() && !player.hasPermission(SettingsConfiguration.COMMAND_IGNORE_PERMISSION.getString())) {
-            player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
+            audience.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
             return;
         }
 
@@ -50,15 +57,15 @@ public class IgnoreCommand extends Command implements TabExecutor {
             Optional<SubCommand> subCommand = Optional.ofNullable(subCommands.get(args[0].toLowerCase()));
 
             if (!subCommand.isPresent()) {
-                for (String string : MessagesConfiguration.IGNORE_USAGE.getStringList()) {
-                    player.sendMessage(TextComponent.fromLegacyText(string));
+                for (Component component : MessagesConfiguration.IGNORE_USAGE.getStringList()) {
+                    audience.sendMessage(component);
                 }
 
                 return;
             }
 
             if (!subCommand.get().getPermission().isEmpty() && !sender.hasPermission(subCommand.get().getPermission())) {
-                player.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
+                audience.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
                 return;
             }
 
@@ -66,8 +73,8 @@ public class IgnoreCommand extends Command implements TabExecutor {
             return;
         }
 
-        for (String string : MessagesConfiguration.IGNORE_USAGE.getStringList())
-            player.sendMessage(TextComponent.fromLegacyText(string));
+        for (Component component : MessagesConfiguration.IGNORE_USAGE.getStringList())
+            audience.sendMessage(component);
     }
 
     @Override
@@ -75,6 +82,7 @@ public class IgnoreCommand extends Command implements TabExecutor {
         if (args.length == 3) {
             return ProxyServer.getInstance().getPlayers().stream().map(ProxiedPlayer::getName).collect(Collectors.toSet());
         }
+
         return ImmutableSet.of();
     }
 }

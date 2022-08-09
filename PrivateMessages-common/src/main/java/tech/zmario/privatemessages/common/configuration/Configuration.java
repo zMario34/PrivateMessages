@@ -96,10 +96,11 @@ public final class Configuration {
 
     public Configuration getSection(String path) {
         Object def = getDefault(path);
+
         return (Configuration) get(path, (def instanceof Configuration) ? def : new Configuration((defaults == null) ? null : defaults.getSection(path)));
     }
 
-    public Collection<String> getKeys() {
+    public Set<String> getKeys() {
         return new LinkedHashSet<>(self.keySet());
     }
 

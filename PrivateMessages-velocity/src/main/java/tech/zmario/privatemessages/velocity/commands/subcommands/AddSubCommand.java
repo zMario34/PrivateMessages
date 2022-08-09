@@ -27,14 +27,14 @@ public class AddSubCommand implements SubCommand {
         }
 
         if (plugin.getStorage().hasIgnored(player.getUniqueId(), args[1].toLowerCase())) {
-            player.sendMessage(MessagesConfiguration.IGNORE_ADD_PLAYER_ALREADY_IGNORED.getString("%target%:" + args[1]));
+            player.sendMessage(MessagesConfiguration.IGNORE_ADD_PLAYER_ALREADY_IGNORED.getString(new String[]{"%target%", args[1]}));
             return;
         }
 
         plugin.getStorage().updateIgnore(player.getUniqueId(), args[1].toLowerCase(), true);
         plugin.getDatabaseManager().addIgnore(player, args[1].toLowerCase());
 
-        player.sendMessage(MessagesConfiguration.IGNORE_ADD_PLAYER_ADDED.getString("%target%:" + args[1]));
+        player.sendMessage(MessagesConfiguration.IGNORE_ADD_PLAYER_ADDED.getString(new String[]{"%target%", args[1]}));
     }
 
     @Override
