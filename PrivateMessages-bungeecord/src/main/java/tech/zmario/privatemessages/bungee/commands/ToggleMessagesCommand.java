@@ -33,11 +33,11 @@ public class ToggleMessagesCommand extends Command {
             return;
         }
 
-        if (plugin.getStorage().hasMessagesToggled(player.getUniqueId())) { // Sono DISABILITATI
-            plugin.getStorage().setMessagesToggled(player.getUniqueId(), false); // ATTIVATI
+        if (plugin.getStorage().hasMessagesToggled(player.getUniqueId())) {
+            plugin.getStorage().setMessagesToggled(player.getUniqueId(), false);
             audience.sendMessage(MessagesConfiguration.TOGGLE_MESSAGES_ON.getString());
         } else {
-            plugin.getStorage().setMessagesToggled(player.getUniqueId(), true); // DISABILITATI
+            plugin.getStorage().setMessagesToggled(player.getUniqueId(), true);
             audience.sendMessage(MessagesConfiguration.TOGGLE_MESSAGES_OFF.getString());
         }
 

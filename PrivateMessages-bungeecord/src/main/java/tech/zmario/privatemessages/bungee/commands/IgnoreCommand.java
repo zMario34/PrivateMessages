@@ -1,6 +1,7 @@
 package tech.zmario.privatemessages.bungee.commands;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -16,7 +17,9 @@ import tech.zmario.privatemessages.bungee.commands.subcommands.ListSubCommand;
 import tech.zmario.privatemessages.bungee.commands.subcommands.RemoveSubCommand;
 import tech.zmario.privatemessages.bungee.enums.MessagesConfiguration;
 import tech.zmario.privatemessages.bungee.enums.SettingsConfiguration;
+import tech.zmario.privatemessages.common.utils.StringUtil;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,14 +27,15 @@ import java.util.stream.Collectors;
 public class IgnoreCommand extends Command implements TabExecutor {
 
     private final PrivateMessagesBungee plugin;
-    private final Map<String, SubCommand> subCommands;
+    private final Map<String, SubCommand> subCommands = Maps.newHashMap();
 
     public IgnoreCommand(PrivateMessagesBungee plugin) {
-        super(SettingsConfiguration.COMMAND_IGNORE_NAME.getString(), SettingsConfiguration.COMMAND_IGNORE_PERMISSION.getString(), SettingsConfiguration.COMMAND_IGNORE_ALIASES.getStringList().toArray(new String[0]));
+        super(SettingsConfiguration.COMMAND_IGNORE_NAME.getString(),
+                SettingsConfiguration.COMMAND_IGNORE_PERMISSION.getString(),
+                SettingsConfiguration.COMMAND_IGNORE_ALIASES.getStringList().toArray(new String[0]));
 
         this.plugin = plugin;
 
-        subCommands = Maps.newHashMap();
         subCommands.put(SettingsConfiguration.COMMAND_IGNORE_ADD_NAME.getString(), new AddSubCommand(plugin));
         subCommands.put(SettingsConfiguration.COMMAND_IGNORE_REMOVE_NAME.getString(), new RemoveSubCommand(plugin));
         subCommands.put(SettingsConfiguration.COMMAND_IGNORE_LIST_NAME.getString(), new ListSubCommand(plugin));
@@ -79,8 +83,27 @@ public class IgnoreCommand extends Command implements TabExecutor {
 
     @Override
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-        if (args.length == 3) {
-            return ProxyServer.getInstance().getPlayers().stream().map(ProxiedPlayer::getName).collect(Collectors.toSet());
+        if (sender instanceof ProxiedPlayer) {
+            if (args.length == 2) {
+                ProxiedPlayer player = (ProxiedPlayer) sender;
+
+                List<String> completions = ProxyServer.getInstance().getPlayers().stream()
+                        .map(ProxiedPlayer::getName)
+                        .filter(name -> !name.equalsIgnoreCase(player.getName()) &&
+                                !plugin.getStorage().hasIgnored(player.getUniqueId(), name))
+                        .collect(Collectors.toList());
+
+                completions.removeIf(s1 -> !StringUtil.startsWithIgnoreCase(s1, args[args.length - 1]));
+
+                return completions;
+            }
+
+            if (args.length == 1) {
+                List<String> completions = Lists.newArrayList(subCommands.keySet());
+                completions.removeIf(s1 -> !StringUtil.startsWithIgnoreCase(s1, args[args.length - 1]));
+
+                return completions;
+            }
         }
 
         return ImmutableSet.of();

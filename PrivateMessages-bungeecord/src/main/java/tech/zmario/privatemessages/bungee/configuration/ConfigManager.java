@@ -48,23 +48,6 @@ public class ConfigManager {
         create(file, file);
     }
 
-    public void save(String file) {
-        Configuration config = get(file);
-
-        if (config == null) {
-            throw new IllegalArgumentException("The specified configuration file doesn't exist!");
-        }
-
-        try {
-            ConfigurationProvider.getProvider(YamlConfiguration.class)
-                    .save(config, new File(folder + "/" + file));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        this.put(file, config);
-    }
-
     public void reload(String file) {
 
         if (!this.configs.containsKey(file)) {

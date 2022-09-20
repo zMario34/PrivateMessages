@@ -53,13 +53,14 @@ public class ReplyCommand extends Command {
             return;
         }
 
-        if (plugin.getProxy().getPluginManager().getPlugin("LiteBans") != null && Database.get().isPlayerMuted(player.getUniqueId(), null)) {
+        if (plugin.getProxy().getPluginManager().getPlugin("LiteBans") != null &&
+                Database.get().isPlayerMuted(player.getUniqueId(), null)) {
             audience.sendMessage(MessagesConfiguration.REPLY_LITEBANS_TARGET_MUTED.getString(new String[]{"%target%", target.getName()}));
             return;
         }
 
         if (data.hasIgnored(player.getUniqueId(), target.getName())) {
-            audience.sendMessage(MessagesConfiguration.REPLY_PLAYER_IGNORED.getString());
+            audience.sendMessage(MessagesConfiguration.REPLY_PLAYER_IGNORED.getString(new String[]{"%target%", target.getName()}));
             data.getWaitingReply().remove(player.getUniqueId());
             return;
         }

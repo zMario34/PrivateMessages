@@ -14,7 +14,7 @@ public class DataStorage {
     public Map<UUID, GamePlayer> gamePlayers = Maps.newHashMap();
 
     public boolean hasIgnored(UUID sender, String targetName) {
-        return gamePlayers.get(sender).getIgnoredPlayers().contains(targetName);
+        return gamePlayers.get(sender).getIgnoredPlayers().contains(targetName.toLowerCase());
     }
 
     public boolean hasMessagesToggled(UUID uniqueId) {

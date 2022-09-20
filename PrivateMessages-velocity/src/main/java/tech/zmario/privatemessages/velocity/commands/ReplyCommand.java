@@ -63,7 +63,7 @@ public class ReplyCommand implements SimpleCommand {
         }
 
         if (data.hasIgnored(player.getUniqueId(), target.getUsername())) {
-            player.sendMessage(MessagesConfiguration.REPLY_PLAYER_IGNORED.getString());
+            player.sendMessage(MessagesConfiguration.REPLY_PLAYER_IGNORED.getString(new String[]{"%target%", target.getUsername()}));
             data.getWaitingReply().remove(player.getUniqueId());
             return;
         }

@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.velocitypowered.api.proxy.Player;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import net.byteflux.libby.Library;
 import tech.zmario.privatemessages.velocity.PrivateMessagesVelocity;
 import tech.zmario.privatemessages.velocity.enums.SettingsConfiguration;
 
@@ -59,7 +58,7 @@ public class DatabaseManager {
     }
 
     public boolean isPresent(Player player) {
-        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM players_data WHERE uuid = ?")) {
                 preparedStatement.setString(1, player.getUniqueId().toString());
 
@@ -72,14 +71,7 @@ public class DatabaseManager {
                 plugin.getLogger().error("Failed to check if player is present. Error message: " + e.getMessage());
             }
             return false;
-        });
-
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException ignored) {
-        }
-
-        return false;
+        }).join();
     }
 
     public void createPlayer(Player player) {
@@ -157,8 +149,9 @@ public class DatabaseManager {
     }
 
     public List<String> getIgnoredPlayers(Player player) {
-        List<String> ignoredPlayers = Lists.newArrayList();
-        CompletableFuture.runAsync(() -> {
+        return CompletableFuture.supplyAsync(() -> {
+            List<String> ignoredPlayers = Lists.newArrayList();
+
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(
                     "SELECT ignored FROM ignored_players INNER JOIN players_data ON players_data.uuid = ignored_players.uuid WHERE players_data.uuid = ?")) {
                 preparedStatement.setString(1, player.getUniqueId().toString());
@@ -172,13 +165,13 @@ public class DatabaseManager {
                 e.printStackTrace();
                 plugin.getLogger().error("Failed to get ignored players. Error message: " + e.getMessage());
             }
-        });
 
-        return ignoredPlayers;
+            return ignoredPlayers;
+        }).join();
     }
 
     public boolean getToggledStatus(Player player) {
-        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("SELECT toggled_messages FROM players_data WHERE uuid = ?")) {
                 preparedStatement.setString(1, player.getUniqueId().toString());
 
@@ -193,18 +186,11 @@ public class DatabaseManager {
                 plugin.getLogger().error("Failed to get toggled status. Error message: " + e.getMessage());
             }
             return false;
-        });
-
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException ignored) {
-        }
-
-        return false;
+        }).join();
     }
 
     public boolean getSocialSpyStatus(Player player) {
-        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement("SELECT social_spy FROM players_data WHERE uuid = ?")) {
                 preparedStatement.setString(1, player.getUniqueId().toString());
 
@@ -220,14 +206,7 @@ public class DatabaseManager {
             }
 
             return false;
-        });
-
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException ignored) {
-        }
-
-        return false;
+        }).join();
     }
 
     public void removeIgnore(Player player, String ignored) {

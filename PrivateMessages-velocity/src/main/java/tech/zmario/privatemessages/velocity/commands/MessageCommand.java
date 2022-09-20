@@ -5,6 +5,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import tech.zmario.privatemessages.common.storage.DataStorage;
+import tech.zmario.privatemessages.common.utils.StringUtil;
 import tech.zmario.privatemessages.velocity.PrivateMessagesVelocity;
 import tech.zmario.privatemessages.velocity.enums.MessagesConfiguration;
 import tech.zmario.privatemessages.velocity.enums.SettingsConfiguration;
@@ -111,10 +112,18 @@ public class MessageCommand implements SimpleCommand {
     public List<String> suggest(SimpleCommand.Invocation invocation) {
         String[] args = invocation.arguments();
 
-        if (args.length == 1) {
-            return plugin.getProxyServer().getAllPlayers().stream()
+        if (args.length == 1 && invocation.source() instanceof Player) {
+            Player player = (Player) invocation.source();
+
+            List<String> completions = plugin.getProxyServer().getAllPlayers().stream()
                     .map(Player::getUsername)
+                    .filter(name -> !name.equals(player.getUsername()) &&
+                            !plugin.getStorage().hasIgnored(player.getUniqueId(), name))
                     .collect(Collectors.toList());
+
+            completions.removeIf(s1 -> !StringUtil.startsWithIgnoreCase(s1, args[args.length - 1]));
+
+            return completions;
         } else {
             return ImmutableList.of();
         }

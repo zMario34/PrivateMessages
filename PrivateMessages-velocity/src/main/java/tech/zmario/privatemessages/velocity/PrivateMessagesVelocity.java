@@ -25,7 +25,7 @@ import java.io.File;
 @Plugin(
         id = "privatemessages",
         name = "PrivateMessages",
-        version = "2.1",
+        version = "2.1.1",
         authors = {"zMario"},
         description = "A plugin that allows you to send private messages to other players."
 )

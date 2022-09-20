@@ -2,7 +2,6 @@ package tech.zmario.privatemessages.bungee.commands;
 
 import com.google.common.collect.ImmutableSet;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -13,8 +12,10 @@ import tech.zmario.privatemessages.bungee.enums.MessagesConfiguration;
 import tech.zmario.privatemessages.bungee.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.bungee.utils.Utils;
 import tech.zmario.privatemessages.common.storage.DataStorage;
+import tech.zmario.privatemessages.common.utils.StringUtil;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class MessageCommand extends Command implements TabExecutor {
@@ -43,7 +44,8 @@ public class MessageCommand extends Command implements TabExecutor {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
 
-        if (!SettingsConfiguration.COMMAND_MESSAGE_PERMISSION.getString().isEmpty() && !player.hasPermission(SettingsConfiguration.COMMAND_MESSAGE_PERMISSION.getString())) {
+        if (!SettingsConfiguration.COMMAND_MESSAGE_PERMISSION.getString().isEmpty() &&
+                !player.hasPermission(SettingsConfiguration.COMMAND_MESSAGE_PERMISSION.getString())) {
             audience.sendMessage(MessagesConfiguration.NO_PERMISSION.getString());
             return;
         }
@@ -61,7 +63,7 @@ public class MessageCommand extends Command implements TabExecutor {
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
         if (target == null) {
-            audience.sendMessage(MessagesConfiguration.MESSAGE_PLAYER_NOT_ONLINE.getString(new String[]{"%target%", args[0]}));
+            audience.sendMessage(MessagesConfiguration.MESSAGE_PLAYER_NOT_ONLINE.getString(new String[]{"%player%", args[0]}));
             return;
         }
 
@@ -74,8 +76,7 @@ public class MessageCommand extends Command implements TabExecutor {
         }
 
         if (data.hasIgnored(target.getUniqueId(), player.getName())) {
-            audience.sendMessage(MessagesConfiguration.MESSAGE_TARGET_IGNORED.getString(
-                    new String[]{"%target%", target.getName()}));
+            audience.sendMessage(MessagesConfiguration.MESSAGE_TARGET_IGNORED.getString(new String[]{"%target%", target.getName()}));
             data.getWaitingReply().remove(player.getUniqueId());
             return;
         }
@@ -120,8 +121,18 @@ public class MessageCommand extends Command implements TabExecutor {
 
     @Override
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-        if (args.length == 1) {
-            return ProxyServer.getInstance().getPlayers().stream().map(ProxiedPlayer::getName).collect(Collectors.toSet());
+        if (args.length == 1 && sender instanceof ProxiedPlayer) {
+            ProxiedPlayer player = (ProxiedPlayer) sender;
+
+            List<String> completions = ProxyServer.getInstance().getPlayers().stream()
+                    .map(ProxiedPlayer::getName)
+                    .filter(name -> !name.equals(player.getName()) &&
+                            !plugin.getStorage().hasIgnored(player.getUniqueId(), name))
+                    .collect(Collectors.toList());
+
+            completions.removeIf(s1 -> !StringUtil.startsWithIgnoreCase(s1, args[args.length - 1]));
+
+            return completions;
         }
 
         return ImmutableSet.of();
