@@ -72,6 +72,16 @@
             <artifactId>PrivateMessages-common</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.simpleyaml</groupId>
+                    <artifactId>simpleyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
@@ -90,6 +100,12 @@
             <artifactId>adventure-api</artifactId>
             <version>4.11.0</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.proxiodev.redisbungee</groupId>
+            <artifactId>RedisBungee-Bungee</artifactId>
+            <version>0.10.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
