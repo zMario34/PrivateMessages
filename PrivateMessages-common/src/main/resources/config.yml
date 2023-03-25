@@ -1,8 +1,8 @@
-# MySQL connection details
+# MySQL's connection details
 mysql:
   enabled: false # Should MySQL be enabled? If false, SQLite will be used instead.
   driver: 'com.mysql.cj.jdbc.Driver' # The driver to use, defaults to 'com.mysql.jdbc.Driver'.
-  host: '127.0.0.1' # Hostname of the MySQL server, defaults to 'localhost'
+  host: 'localhost' # Hostname of the MySQL server, defaults to 'localhost'
   port: 3306 # Database port, 3306 is the default
   username: root # Username to connect to the MySQL server, defaults to 'root'
   password: 'password' # Password to connect to the MySQL server, defaults to 'password'

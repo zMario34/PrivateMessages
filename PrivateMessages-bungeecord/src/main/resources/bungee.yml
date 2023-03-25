@@ -1,5 +1,4 @@
 name: PrivateMessages
 version: '${project.version}'
 main: tech.zmario.privatemessages.bungee.BungeeCordBootstrap
-softdepends: [LuckPerms]
 author: zMario
