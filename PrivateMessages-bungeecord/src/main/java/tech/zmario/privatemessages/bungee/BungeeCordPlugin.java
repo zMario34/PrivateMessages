@@ -73,6 +73,7 @@ public class BungeeCordPlugin extends AbstractPrivateMessagesPlugin {
         Library textSerializer = Library.builder().groupId("net{}kyori").artifactId("adventure-text-serializer-legacy").version("4.13.0").build();
 
         libraryManager.addMavenCentral();
+        libraryManager.addJitPack();
 
         if (SettingsConfiguration.MYSQL_ENABLED.getBoolean(this)) {
             Library mysqlConnector = Library.builder()
