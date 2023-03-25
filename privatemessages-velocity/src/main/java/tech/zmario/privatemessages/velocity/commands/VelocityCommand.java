@@ -15,11 +15,11 @@ public class VelocityCommand implements SimpleCommand {
 
     @Override
     public void execute(Invocation invocation) {
-        command.execute(plugin.getSenderFactory().getSender(invocation.source()), invocation.arguments());
+        command.execute(plugin.getSenderFactory().wrapSender(invocation.source()), invocation.arguments());
     }
 
     @Override
     public List<String> suggest(Invocation invocation) {
-        return command.suggest(plugin.getSenderFactory().getSender(invocation.source()), invocation.arguments());
+        return command.suggest(plugin.getSenderFactory().wrapSender(invocation.source()), invocation.arguments());
     }
 }

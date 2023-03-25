@@ -2,13 +2,13 @@ package tech.zmario.privatemessages.common.listeners;
 
 import tech.zmario.privatemessages.common.factory.user.Sender;
 import tech.zmario.privatemessages.common.objects.User;
-import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
+import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 
 import java.util.UUID;
 
 public abstract class AbstractConnectionListener {
 
-    public void handleJoinEvent(Sender sender, AbstractPrivateMessagesPlugin plugin) {
+    public void handleJoinEvent(Sender sender, PrivateMessagesPlugin plugin) {
         UUID uuid = sender.getUniqueId();
 
         plugin.getSqlManager().isPresent(uuid).thenAccept(present -> {

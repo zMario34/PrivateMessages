@@ -17,6 +17,6 @@ public class ConnectionListener extends AbstractConnectionListener implements Li
     public void onJoin(PostLoginEvent event) {
         ProxiedPlayer player = event.getPlayer();
 
-        handleJoinEvent(plugin.getSenderFactory().getSender(player), plugin);
+        handleJoinEvent(plugin.getSenderFactory().wrapSender(player), plugin);
     }
 }

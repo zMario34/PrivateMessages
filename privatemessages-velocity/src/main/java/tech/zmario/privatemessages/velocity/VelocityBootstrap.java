@@ -12,7 +12,7 @@ import net.byteflux.libby.VelocityLibraryManager;
 import org.slf4j.LoggerFactory;
 import tech.zmario.privatemessages.common.platform.Platform;
 import tech.zmario.privatemessages.common.platform.PlatformType;
-import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
+import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 import tech.zmario.privatemessages.common.plugin.bootstrap.PrivateMessagesBootstrap;
 
 import javax.inject.Inject;
@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 @Getter
 public class VelocityBootstrap implements PrivateMessagesBootstrap {
 
-    private final AbstractPrivateMessagesPlugin plugin;
+    private final PrivateMessagesPlugin plugin;
     private final ProxyServer proxyServer;
     private final Logger logger;
 

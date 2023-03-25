@@ -18,11 +18,11 @@ public class BungeeCommand extends net.md_5.bungee.api.plugin.Command implements
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        command.execute(plugin.getSenderFactory().getSender(sender), args);
+        command.execute(plugin.getSenderFactory().wrapSender(sender), args);
     }
 
     @Override
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-        return command.suggest(plugin.getSenderFactory().getSender(sender), args);
+        return command.suggest(plugin.getSenderFactory().wrapSender(sender), args);
     }
 }

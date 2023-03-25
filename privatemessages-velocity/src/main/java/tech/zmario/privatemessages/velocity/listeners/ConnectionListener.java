@@ -17,6 +17,6 @@ public class ConnectionListener extends AbstractConnectionListener {
         Player player = event.getPlayer();
 
         if (!player.isActive()) return;
-        handleJoinEvent(plugin.getSenderFactory().getSender(player), plugin);
+        handleJoinEvent(plugin.getSenderFactory().wrapSender(player), plugin);
     }
 }

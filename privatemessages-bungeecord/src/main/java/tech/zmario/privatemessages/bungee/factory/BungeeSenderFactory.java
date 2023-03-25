@@ -24,17 +24,17 @@ public class BungeeSenderFactory implements SenderFactory<CommandSender> {
     }
 
     @Override
-    public Optional<Sender> getSender(String name) {
-        return getProxyUser(name).map(this::getSender);
+    public Optional<Sender> wrapSender(String name) {
+        return getProxyUser(name).map(this::wrapSender);
     }
 
     @Override
-    public Optional<Sender> getSender(UUID uuid) {
-        return Optional.ofNullable(getSender(plugin.getBootstrap().getProxyServer().getPlayer(uuid)));
+    public Optional<Sender> wrapSender(UUID uuid) {
+        return Optional.ofNullable(wrapSender(plugin.getBootstrap().getProxyServer().getPlayer(uuid)));
     }
 
     @Override
-    public Sender getSender(CommandSender source) {
+    public Sender wrapSender(CommandSender source) {
         if (source instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) source;
             return new BaseSender<>(player.getUniqueId(), player, this);

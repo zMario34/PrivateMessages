@@ -20,17 +20,17 @@ public class VelocitySenderFactory implements SenderFactory<CommandSource> {
     private final VelocityPlugin plugin;
 
     @Override
-    public Optional<Sender> getSender(String name) {
-        return getProxyUser(name).map(this::getSender);
+    public Optional<Sender> wrapSender(String name) {
+        return getProxyUser(name).map(this::wrapSender);
     }
 
     @Override
-    public Optional<Sender> getSender(UUID uuid) {
-        return plugin.getBootstrap().getProxyServer().getPlayer(uuid).map(this::getSender);
+    public Optional<Sender> wrapSender(UUID uuid) {
+        return plugin.getBootstrap().getProxyServer().getPlayer(uuid).map(this::wrapSender);
     }
 
     @Override
-    public Sender getSender(CommandSource sender) {
+    public Sender wrapSender(CommandSource sender) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             return new BaseSender<>(player.getUniqueId(), player, this);

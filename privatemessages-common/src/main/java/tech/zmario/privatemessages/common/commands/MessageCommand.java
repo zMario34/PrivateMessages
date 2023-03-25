@@ -10,7 +10,7 @@ import tech.zmario.privatemessages.common.configuration.enums.MessagesConfigurat
 import tech.zmario.privatemessages.common.configuration.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.factory.user.Sender;
 import tech.zmario.privatemessages.common.objects.Placeholder;
-import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
+import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 import tech.zmario.privatemessages.common.storage.DataStorage;
 import tech.zmario.privatemessages.common.utils.StringUtil;
 import tech.zmario.privatemessages.common.utils.Utils;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MessageCommand implements Command {
 
-    private final AbstractPrivateMessagesPlugin plugin;
+    private final PrivateMessagesPlugin plugin;
 
     @Override
     public void execute(Sender sender, String[] args) {
@@ -50,7 +50,7 @@ public class MessageCommand implements Command {
             MessagesConfiguration.MESSAGE_USAGE.sendMessage(sender, plugin);
             return;
         }
-        Optional<Sender> targetOptional = plugin.getSenderFactory().getSender(args[0]);
+        Optional<Sender> targetOptional = plugin.getSenderFactory().wrapSender(args[0]);
 
         if (!targetOptional.isPresent()) {
             MessagesConfiguration.MESSAGE_PLAYER_NOT_ONLINE.sendMessage(sender, plugin,

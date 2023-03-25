@@ -7,7 +7,7 @@ import tech.zmario.privatemessages.common.configuration.enums.MessagesConfigurat
 import tech.zmario.privatemessages.common.configuration.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.factory.user.Sender;
 import tech.zmario.privatemessages.common.objects.Placeholder;
-import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
+import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 import tech.zmario.privatemessages.common.storage.DataStorage;
 import tech.zmario.privatemessages.common.utils.Utils;
 
@@ -18,7 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ReplyCommand implements Command {
 
-    private final AbstractPrivateMessagesPlugin plugin;
+    private final PrivateMessagesPlugin plugin;
 
     @Override
     public void execute(Sender sender, String[] args) {
@@ -45,7 +45,7 @@ public class ReplyCommand implements Command {
             return;
         }
         UUID targetUUID = data.getWaitingReply().get(sender.getUniqueId());
-        Optional<Sender> targetOptional = plugin.getSenderFactory().getSender(targetUUID);
+        Optional<Sender> targetOptional = plugin.getSenderFactory().wrapSender(targetUUID);
 
         if (!targetOptional.isPresent()) {
             MessagesConfiguration.REPLY_PLAYER_NOT_ONLINE.sendMessage(sender, plugin);

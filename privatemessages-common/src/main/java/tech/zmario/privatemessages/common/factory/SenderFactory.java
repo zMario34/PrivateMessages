@@ -9,10 +9,10 @@ import java.util.UUID;
 
 public interface SenderFactory<T> {
 
-    Optional<Sender> getSender(String name);
-    Optional<Sender> getSender(UUID uuid);
+    Optional<Sender> wrapSender(String name);
+    Optional<Sender> wrapSender(UUID uuid);
 
-    Sender getSender(T player);
+    Sender wrapSender(T player);
 
     String getName(T player);
 

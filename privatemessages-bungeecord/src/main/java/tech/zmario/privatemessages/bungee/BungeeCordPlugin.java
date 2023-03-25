@@ -11,14 +11,14 @@ import tech.zmario.privatemessages.common.commands.*;
 import tech.zmario.privatemessages.common.commands.interfaces.Command;
 import tech.zmario.privatemessages.common.configuration.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.factory.user.Sender;
-import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
+import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 import tech.zmario.privatemessages.common.plugin.bootstrap.PrivateMessagesBootstrap;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class BungeeCordPlugin extends AbstractPrivateMessagesPlugin {
+public class BungeeCordPlugin extends PrivateMessagesPlugin {
 
     private final BungeeCordBootstrap bootstrap;
     private BungeeSenderFactory senderFactory;
@@ -44,11 +44,10 @@ public class BungeeCordPlugin extends AbstractPrivateMessagesPlugin {
     public List<Sender> getOnlineUsers() {
         return bootstrap.getProxyServer().getPlayers()
                 .stream()
-                .map(senderFactory::getSender)
+                .map(senderFactory::wrapSender)
                 .collect(Collectors.toList());
     }
 
-    @Override
     public LibraryManager getLibraryManager() {
         return bootstrap.getLibraryManager();
     }
@@ -71,7 +70,7 @@ public class BungeeCordPlugin extends AbstractPrivateMessagesPlugin {
         Library hikariCp = Library.builder().groupId("com{}zaxxer").artifactId("HikariCP").version("4.0.3").build();
         Library miniMessage = Library.builder().groupId("net{}kyori").artifactId("adventure-text-minimessage").version("4.13.0").build();
         Library textSerializer = Library.builder().groupId("net{}kyori").artifactId("adventure-text-serializer-legacy").version("4.13.0").build();
-        
+
         libraryManager.addMavenCentral();
         libraryManager.addJitPack();
 

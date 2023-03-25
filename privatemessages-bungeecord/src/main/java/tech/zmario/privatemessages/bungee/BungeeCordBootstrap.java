@@ -7,7 +7,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import tech.zmario.privatemessages.common.platform.Platform;
 import tech.zmario.privatemessages.common.platform.PlatformType;
-import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
+import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 import tech.zmario.privatemessages.common.plugin.bootstrap.PrivateMessagesBootstrap;
 
 import java.io.File;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 @Getter
 public final class BungeeCordBootstrap extends Plugin implements PrivateMessagesBootstrap {
 
-    private final AbstractPrivateMessagesPlugin plugin = new BungeeCordPlugin(this);
+    private final PrivateMessagesPlugin plugin = new BungeeCordPlugin(this);
     private final Platform platform = new Platform(PlatformType.BUNGEECORD, getDescription().getVersion());
 
     private final ProxyServer proxyServer = ProxyServer.getInstance();

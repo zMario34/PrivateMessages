@@ -5,14 +5,14 @@ import tech.zmario.privatemessages.common.commands.interfaces.Command;
 import tech.zmario.privatemessages.common.configuration.enums.MessagesConfiguration;
 import tech.zmario.privatemessages.common.configuration.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.factory.user.Sender;
-import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
+import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 public class SocialSpyCommand implements Command {
 
-    private final AbstractPrivateMessagesPlugin plugin;
+    private final PrivateMessagesPlugin plugin;
 
     @Override
     public void execute(Sender sender, String[] args) {

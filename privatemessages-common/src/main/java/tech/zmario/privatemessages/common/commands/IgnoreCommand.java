@@ -10,7 +10,7 @@ import tech.zmario.privatemessages.common.commands.subcommands.RemoveSubCommand;
 import tech.zmario.privatemessages.common.configuration.enums.MessagesConfiguration;
 import tech.zmario.privatemessages.common.configuration.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.factory.user.Sender;
-import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
+import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 import tech.zmario.privatemessages.common.utils.StringUtil;
 
 import java.util.List;
@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 
 public class IgnoreCommand implements Command {
 
-    private final AbstractPrivateMessagesPlugin plugin;
+    private final PrivateMessagesPlugin plugin;
     private final Map<String, Command> subCommands = Maps.newHashMap();
 
-    public IgnoreCommand(AbstractPrivateMessagesPlugin plugin) {
+    public IgnoreCommand(PrivateMessagesPlugin plugin) {
         this.plugin = plugin;
 
         subCommands.put(SettingsConfiguration.COMMAND_IGNORE_ADD_NAME.getString(plugin), new AddSubCommand(plugin));

@@ -6,14 +6,14 @@ import tech.zmario.privatemessages.common.configuration.enums.MessagesConfigurat
 import tech.zmario.privatemessages.common.configuration.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.factory.user.Sender;
 import tech.zmario.privatemessages.common.objects.Placeholder;
-import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
+import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 public class ListSubCommand implements Command {
 
-    private final AbstractPrivateMessagesPlugin plugin;
+    private final PrivateMessagesPlugin plugin;
 
     @Override
     public void execute(Sender sender, String[] args) {

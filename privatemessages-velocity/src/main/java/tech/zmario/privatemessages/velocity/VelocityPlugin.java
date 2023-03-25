@@ -9,7 +9,7 @@ import tech.zmario.privatemessages.common.commands.*;
 import tech.zmario.privatemessages.common.commands.interfaces.Command;
 import tech.zmario.privatemessages.common.configuration.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.factory.user.Sender;
-import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
+import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 import tech.zmario.privatemessages.common.plugin.bootstrap.PrivateMessagesBootstrap;
 import tech.zmario.privatemessages.velocity.commands.VelocityCommand;
 import tech.zmario.privatemessages.velocity.factory.VelocitySenderFactory;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class VelocityPlugin extends AbstractPrivateMessagesPlugin {
+public class VelocityPlugin extends PrivateMessagesPlugin {
 
     private final VelocityBootstrap bootstrap;
     private VelocitySenderFactory senderFactory;
@@ -44,11 +44,10 @@ public class VelocityPlugin extends AbstractPrivateMessagesPlugin {
     public List<Sender> getOnlineUsers() {
         return bootstrap.getProxyServer().getAllPlayers()
                 .stream()
-                .map(senderFactory::getSender)
+                .map(senderFactory::wrapSender)
                 .collect(Collectors.toList());
     }
 
-    @Override
     public LibraryManager getLibraryManager() {
         return bootstrap.getLibraryManager();
     }
