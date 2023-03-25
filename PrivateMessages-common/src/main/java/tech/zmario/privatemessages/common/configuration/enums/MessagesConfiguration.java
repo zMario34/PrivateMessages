@@ -1,6 +1,5 @@
 package tech.zmario.privatemessages.common.configuration.enums;
 
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import tech.zmario.privatemessages.common.factory.user.Sender;
 import tech.zmario.privatemessages.common.objects.Placeholder;
@@ -62,6 +61,9 @@ public enum MessagesConfiguration {
 
     TOGGLE_MESSAGES_ON("commands.toggle-messages.toggle-on"),
     TOGGLE_MESSAGES_OFF("commands.toggle-messages.toggle-off"),
+
+    TOGGLE_SOUND_ON("commands.toggle-sound.toggle-on"),
+    TOGGLE_SOUND_OFF("commands.toggle-sound.toggle-off"),
     ;
 
 

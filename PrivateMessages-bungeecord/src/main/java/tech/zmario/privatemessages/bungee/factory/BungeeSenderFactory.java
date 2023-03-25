@@ -1,6 +1,7 @@
 package tech.zmario.privatemessages.bungee.factory;
 
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -66,6 +67,11 @@ public class BungeeSenderFactory implements SenderFactory<CommandSender> {
     @Override
     public void sendMessage(CommandSender sender, Component component) {
         audiences.sender(sender).sendMessage(component);
+    }
+
+    @Override
+    public void playSound(CommandSender sender, Sound sound) {
+        audiences.sender(sender).playSound(sound);
     }
 
     @Override

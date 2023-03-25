@@ -19,6 +19,7 @@ public abstract class AbstractConnectionListener {
 
                 plugin.getSqlManager().getToggledStatus(uuid).thenAccept(user::setToggleEnabled);
                 plugin.getSqlManager().getSocialSpyStatus(uuid).thenAccept(user::setSocialSpyEnabled);
+                plugin.getSqlManager().getSoundStatus(uuid).thenAccept(user::setSoundEnabled);
 
                 plugin.getDataStorage().getUsers().put(uuid, user);
             });

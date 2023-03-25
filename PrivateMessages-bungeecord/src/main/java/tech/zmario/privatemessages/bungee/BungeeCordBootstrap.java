@@ -1,12 +1,10 @@
 package tech.zmario.privatemessages.bungee;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.byteflux.libby.BungeeLibraryManager;
 import net.byteflux.libby.LibraryManager;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
-import org.slf4j.LoggerFactory;
 import tech.zmario.privatemessages.common.platform.Platform;
 import tech.zmario.privatemessages.common.platform.PlatformType;
 import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;

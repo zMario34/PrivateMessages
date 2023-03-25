@@ -1,6 +1,7 @@
 package tech.zmario.privatemessages.common.factory.user.impl;
 
 import lombok.Data;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import tech.zmario.privatemessages.common.factory.SenderFactory;
 import tech.zmario.privatemessages.common.factory.user.Sender;
@@ -22,6 +23,11 @@ public class BaseSender<T> implements Sender {
     @Override
     public void sendMessage(Component component) {
         senderFactory.sendMessage(sender, component);
+    }
+
+    @Override
+    public void playSound(Sound sound) {
+        senderFactory.playSound(sender, sound);
     }
 
     @Override

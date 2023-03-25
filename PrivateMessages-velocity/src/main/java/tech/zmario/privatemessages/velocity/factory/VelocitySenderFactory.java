@@ -4,6 +4,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
 import lombok.RequiredArgsConstructor;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import tech.zmario.privatemessages.common.factory.SenderFactory;
 import tech.zmario.privatemessages.common.factory.user.Sender;
@@ -29,13 +30,13 @@ public class VelocitySenderFactory implements SenderFactory<CommandSource> {
     }
 
     @Override
-    public Sender getSender(CommandSource source) {
-        if (source instanceof Player) {
-            Player player = (Player) source;
+    public Sender getSender(CommandSource sender) {
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
             return new BaseSender<>(player.getUniqueId(), player, this);
         }
 
-        return new BaseSender<>(UUID.randomUUID(), source, this);
+        return new BaseSender<>(UUID.randomUUID(), sender, this);
     }
 
     private Optional<CommandSource> getProxyUser(String name) {
@@ -53,9 +54,9 @@ public class VelocitySenderFactory implements SenderFactory<CommandSource> {
     }
 
     @Override
-    public String getName(CommandSource CommandSource) {
-        if (CommandSource instanceof Player) {
-            return ((Player) CommandSource).getUsername();
+    public String getName(CommandSource sender) {
+        if (sender instanceof Player) {
+            return ((Player) sender).getUsername();
         }
 
         return "Console";
@@ -69,8 +70,13 @@ public class VelocitySenderFactory implements SenderFactory<CommandSource> {
     }
 
     @Override
-    public void sendMessage(CommandSource CommandSource, Component component) {
-        CommandSource.sendMessage(component);
+    public void sendMessage(CommandSource sender, Component component) {
+        sender.sendMessage(component);
+    }
+
+    @Override
+    public void playSound(CommandSource sender, Sound sound) {
+        sender.playSound(sound);
     }
 
     @Override
@@ -85,6 +91,6 @@ public class VelocitySenderFactory implements SenderFactory<CommandSource> {
 
     @Override
     public boolean isConsole(Sender sender) {
-        return getProxyUser(sender.getName()).map(CommandSource -> CommandSource instanceof ConsoleCommandSource).orElse(false);
+        return getProxyUser(sender.getName()).map(source -> source instanceof ConsoleCommandSource).orElse(false);
     }
 }

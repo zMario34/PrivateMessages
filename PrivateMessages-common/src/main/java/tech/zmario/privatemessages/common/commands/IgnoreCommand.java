@@ -3,7 +3,6 @@ package tech.zmario.privatemessages.common.commands;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.kyori.adventure.text.Component;
 import tech.zmario.privatemessages.common.commands.interfaces.Command;
 import tech.zmario.privatemessages.common.commands.subcommands.AddSubCommand;
 import tech.zmario.privatemessages.common.commands.subcommands.ListSubCommand;

@@ -10,7 +10,6 @@ import lombok.Getter;
 import net.byteflux.libby.LibraryManager;
 import net.byteflux.libby.VelocityLibraryManager;
 import org.slf4j.LoggerFactory;
-import tech.zmario.privatemessages.common.configuration.ConfigManager;
 import tech.zmario.privatemessages.common.platform.Platform;
 import tech.zmario.privatemessages.common.platform.PlatformType;
 import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;

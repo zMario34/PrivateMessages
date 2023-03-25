@@ -5,7 +5,6 @@ import net.kyori.adventure.text.Component;
 import tech.zmario.privatemessages.common.configuration.ConfigManager;
 import tech.zmario.privatemessages.common.factory.SenderFactory;
 import tech.zmario.privatemessages.common.factory.user.Sender;
-import tech.zmario.privatemessages.common.hooks.RedisBungeeHook;
 import tech.zmario.privatemessages.common.plugin.bootstrap.PrivateMessagesBootstrap;
 import tech.zmario.privatemessages.common.storage.DataStorage;
 

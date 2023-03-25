@@ -16,6 +16,11 @@ public enum SettingsConfiguration {
     MYSQL_DATABASE("mysql.database"),
     MYSQL_SSL("mysql.ssl"),
 
+    MESSAGE_SOUND_KEY("message-sound.key"),
+    MESSAGE_SOUND_SOURCE("message-sound.source"),
+    MESSAGE_SOUND_VOLUME("message-sound.volume"),
+    MESSAGE_SOUND_PITCH("message-sound.pitch"),
+
     COMMAND_RELOAD_NAME("commands.reload.name"),
     COMMAND_RELOAD_PERMISSION("commands.reload.permission"),
 
@@ -48,6 +53,10 @@ public enum SettingsConfiguration {
     COMMAND_TOGGLE_MESSAGES_NAME("commands.toggle-messages.name"),
     COMMAND_TOGGLE_MESSAGES_PERMISSION("commands.toggle-messages.permission"),
     COMMAND_TOGGLE_MESSAGES_ALIASES("commands.toggle-messages.aliases"),
+
+    COMMAND_TOGGLE_SOUND_NAME("commands.toggle-sound.name"),
+    COMMAND_TOGGLE_SOUND_PERMISSION("commands.toggle-sound.permission"),
+    COMMAND_TOGGLE_SOUND_ALIASES("commands.toggle-sound.aliases"),
     ;
 
     private final String path;
@@ -70,5 +79,9 @@ public enum SettingsConfiguration {
 
     public List<String> getStringList(PrivateMessagesPlugin instance) {
         return instance.getConfigManager().getConfig().getStringList(path);
+    }
+
+    public float getFloat(PrivateMessagesPlugin plugin) {
+        return (float) plugin.getConfigManager().getConfig().getDouble(path);
     }
 }

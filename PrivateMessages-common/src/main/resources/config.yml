@@ -8,6 +8,11 @@ mysql:
   password: 'password' # Password to connect to the MySQL server, defaults to 'password'
   ssl: false # Should SSL be used? Defaults to false
   database: privatemessages # Database to use, defaults to 'privatemessages'
+message-sound:
+  key: 'entity.experience_orb.pickup' # The sound to play when a message is received
+  source: 'PLAYER' # The source of the sound
+  volume: 1.0 # The volume of the sound
+  pitch: 1.0 # The pitch of the sound
 # Commands section
 commands:
   reload:
@@ -26,7 +31,7 @@ commands:
       - msg
   reply:
     name: reply
-    permission: 'privatemessages.command.reply'
+    permission: 'privatemessages.command.message'
     aliases:
       - r
   ignore:
@@ -36,19 +41,24 @@ commands:
       - ignores
     add:
       name: add
-      permission: 'privatemessages.command.ignore.add'
+      permission: 'privatemessages.command.ignore'
     remove:
       name: remove
-      permission: 'privatemessages.command.ignore.remove'
+      permission: 'privatemessages.command.ignore'
     list:
       name: list
-      permission: 'privatemessages.command.ignore.list'
+      permission: 'privatemessages.command.ignore'
       max-size: 10
   toggle-messages:
     name: togglemessages
-    permission: 'privatemessages.command.togglemessages'
+    permission: 'privatemessages.command.toggle'
     aliases:
       - toggle-messages
+  toggle-sound:
+    name: togglesound
+    permission: 'privatemessages.command.toggle'
+    aliases:
+      - toggle-sound
   social-spy:
     name: socialspy
     permission: 'privatemessages.command.socialspy'

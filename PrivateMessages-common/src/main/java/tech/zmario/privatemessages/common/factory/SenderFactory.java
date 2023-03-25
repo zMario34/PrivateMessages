@@ -1,5 +1,6 @@
 package tech.zmario.privatemessages.common.factory;
 
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import tech.zmario.privatemessages.common.factory.user.Sender;
 
@@ -20,6 +21,8 @@ public interface SenderFactory<T> {
     String getServerName(Sender sender);
 
     void sendMessage(T player, Component component);
+
+    void playSound(T sender, Sound sound);
 
     boolean hasPermission(T player, String permission);
 

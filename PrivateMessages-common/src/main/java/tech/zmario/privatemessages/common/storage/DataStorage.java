@@ -29,15 +29,25 @@ public class DataStorage {
         users.get(uuid).setToggleEnabled(status);
     }
 
+    public void setSoundToggled(UUID uuid, boolean status) {
+        users.get(uuid).setSoundEnabled(status);
+    }
+
     public void setSocialSpy(UUID uuid, boolean status) {
         users.get(uuid).setSocialSpyEnabled(status);
     }
 
-    public void updateIgnore(UUID sender, String targetName, boolean add) {
+    public void updateIgnore(UUID uuid, String targetName, boolean add) {
+        User user = users.get(uuid);
+
         if (add) {
-            users.get(sender).getIgnoredPlayers().add(targetName);
+            user.getIgnoredPlayers().add(targetName);
         } else {
-            users.get(sender).getIgnoredPlayers().remove(targetName);
+            user.getIgnoredPlayers().remove(targetName);
         }
+    }
+
+    public boolean hasSoundToggled(UUID uuid) {
+        return users.get(uuid).isSoundEnabled();
     }
 }

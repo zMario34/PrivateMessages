@@ -77,8 +77,10 @@ public class ConnectionPoolManager {
 
     private void makeTables() {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `players_data` (uuid varchar(36) NOT NULL, social_spy boolean NOT NULL, toggled_messages boolean NOT NULL)");
-             PreparedStatement preparedStatement1 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `ignored_players` (uuid varchar(36) NOT NULL, ignored varchar(36) NOT NULL)")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `players_data` " +
+                     "(uuid varchar(36) NOT NULL, social_spy boolean NOT NULL, toggled_messages boolean NOT NULL, toggled_sound boolean NOT NULL, PRIMARY KEY (uuid))");
+             PreparedStatement preparedStatement1 = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `ignored_players` " +
+                     "(uuid varchar(36) NOT NULL, ignored varchar(36) NOT NULL)")) {
 
             preparedStatement.executeUpdate();
             preparedStatement1.executeUpdate();

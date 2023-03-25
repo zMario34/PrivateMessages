@@ -12,5 +12,6 @@ public class User {
     private final List<String> ignoredPlayers;
     private boolean toggleEnabled;
     private boolean socialSpyEnabled;
+    private boolean soundEnabled;
 
 }

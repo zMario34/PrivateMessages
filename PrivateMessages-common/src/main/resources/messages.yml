@@ -56,3 +56,6 @@ commands:
   toggle-messages:
     toggle-on: '&8» &aYou will now receive messages!'
     toggle-off: '&8» &cYou won''t longer receive messages!'
+  toggle-sound:
+    toggle-on: '&8» &aYou will now receive a sound when you receive a message!'
+    toggle-off: '&8» &cYou won''t longer receive sounds!'

@@ -2,7 +2,8 @@ package tech.zmario.privatemessages.common.commands;
 
 import com.google.common.collect.ImmutableList;
 import lombok.RequiredArgsConstructor;
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import org.simpleyaml.configuration.file.FileConfiguration;
 import tech.zmario.privatemessages.common.commands.interfaces.Command;
 import tech.zmario.privatemessages.common.configuration.enums.MessagesConfiguration;
@@ -105,6 +106,12 @@ public class MessageCommand implements Command {
                 new Placeholder("message", message),
                 new Placeholder("player_server", Utils.getServerDisplay(targetServerName, config)),
                 new Placeholder("target_server", Utils.getServerDisplay(senderServerName, config)));
+
+        if (plugin.getDataStorage().hasSoundToggled(target.getUniqueId()))
+            target.playSound(Sound.sound(Key.key(SettingsConfiguration.MESSAGE_SOUND_KEY.getString(plugin)),
+                    Sound.Source.valueOf(SettingsConfiguration.MESSAGE_SOUND_SOURCE.getString(plugin)),
+                    SettingsConfiguration.MESSAGE_SOUND_VOLUME.getFloat(plugin),
+                    SettingsConfiguration.MESSAGE_SOUND_PITCH.getFloat(plugin)));
 
         data.getWaitingReply().put(target.getUniqueId(), sender.getUniqueId());
         plugin.sendSpyMessage(sender, target, message);

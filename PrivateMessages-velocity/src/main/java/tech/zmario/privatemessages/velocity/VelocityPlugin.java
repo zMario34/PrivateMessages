@@ -9,7 +9,6 @@ import tech.zmario.privatemessages.common.commands.*;
 import tech.zmario.privatemessages.common.commands.interfaces.Command;
 import tech.zmario.privatemessages.common.configuration.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.factory.user.Sender;
-import tech.zmario.privatemessages.common.hooks.RedisBungeeHook;
 import tech.zmario.privatemessages.common.plugin.AbstractPrivateMessagesPlugin;
 import tech.zmario.privatemessages.common.plugin.bootstrap.PrivateMessagesBootstrap;
 import tech.zmario.privatemessages.velocity.commands.VelocityCommand;
@@ -60,7 +59,8 @@ public class VelocityPlugin extends AbstractPrivateMessagesPlugin {
                 new ReplyCommand(this),
                 new IgnoreCommand(this),
                 new SocialSpyCommand(this),
-                new ToggleMessagesCommand(this));
+                new ToggleMessagesCommand(this),
+                new ToggleSoundCommand(this));
 
         commands.forEach(command -> {
             CommandMeta meta = bootstrap.getProxyServer().getCommandManager().metaBuilder(command.getName())
@@ -104,10 +104,5 @@ public class VelocityPlugin extends AbstractPrivateMessagesPlugin {
         libraryManager.loadLibrary(simpleYaml);
         libraryManager.loadLibrary(miniMessage);
         libraryManager.loadLibrary(textSerializer);
-    }
-
-    @Override
-    public RedisBungeeHook getRedisBungeeHook() {
-        return null;
     }
 }
