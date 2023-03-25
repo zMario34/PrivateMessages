@@ -78,7 +78,7 @@ public class VelocityPlugin extends AbstractPrivateMessagesPlugin {
         Library hikariCp = Library.builder().groupId("com{}zaxxer").artifactId("HikariCP").version("4.0.3").build();
         Library simpleYaml = Library.builder().groupId("me{}carleslc").artifactId("Simple-YAML").version("1.8.3").build();
         Library miniMessage = Library.builder().groupId("net{}kyori").artifactId("adventure-text-minimessage").version("4.13.0").build();
-        Library textSerializer = Library.builder().groupId("net{}kyori").artifactId("adventure-text-serializer-legacy<").version("4.13.0").build();
+        Library textSerializer = Library.builder().groupId("net{}kyori").artifactId("adventure-text-serializer-legacy").version("4.13.0").build();
 
         libraryManager.addMavenCentral();
         libraryManager.addJitPack();
