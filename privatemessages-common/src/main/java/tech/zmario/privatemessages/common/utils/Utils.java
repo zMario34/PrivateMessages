@@ -6,6 +6,8 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
+import java.util.regex.Pattern;
+
 @UtilityClass
 public class Utils {
 
@@ -20,5 +22,28 @@ public class Utils {
         }
 
         return server;
+    }
+
+    public boolean isCaps(String message, int percentage) {
+        int caps = 0;
+        int total = 0;
+
+        for (char c : message.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                caps++;
+            }
+
+            if (Character.isLetter(c)) {
+                total++;
+            }
+        }
+
+        return total != 0 && (caps * 100 / total) >= percentage;
+    }
+
+    public String filterSwear(String message, String regex) {
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+
+        return pattern.matcher(message).replaceAll("***");
     }
 }

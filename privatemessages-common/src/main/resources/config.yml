@@ -13,6 +13,11 @@ message-sound:
   source: 'PLAYER' # The source of the sound
   volume: 1.0 # The volume of the sound
   pitch: 1.0 # The pitch of the sound
+anti-swear:
+  enable-caps-filter: true # Should the caps filter be enabled?
+  enable-swear-filter: true # Should the swear filter be enabled?
+  caps-percent: 50 # The percentage of caps in a message to trigger the filter
+  swear-regex: '(?i)(f|ph)(u|o|a)(c|k|q)(k|q)' # The regex to use to detect swears
 # Commands section
 commands:
   reload:

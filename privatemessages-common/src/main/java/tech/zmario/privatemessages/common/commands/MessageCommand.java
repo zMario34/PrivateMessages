@@ -95,6 +95,15 @@ public class MessageCommand implements Command {
         String targetServerName = plugin.getSenderFactory().getServerName(target);
         FileConfiguration config = plugin.getConfigManager().getConfig();
 
+        if (SettingsConfiguration.ANTI_SWEAR_ENABLE_CAPS_FILTER.getBoolean(plugin)
+                && Utils.isCaps(message, SettingsConfiguration.ANTI_SWEAR_CAPS_FILTER_PERCENTAGE.getInt(plugin))) {
+            message = message.toLowerCase();
+        }
+
+        if (SettingsConfiguration.ANTI_SWEAR_ENABLE_SWEAR_FILTER.getBoolean(plugin)) {
+            message = Utils.filterSwear(message, SettingsConfiguration.ANTI_SWEAR_SWEAR_REGEX.getString(plugin));
+        }
+
         MessagesConfiguration.MESSAGE_SENDER_FORMAT.sendMessage(sender, plugin,
                 new Placeholder("target", target.getName()),
                 new Placeholder("message", message),

@@ -21,6 +21,11 @@ public enum SettingsConfiguration {
     MESSAGE_SOUND_VOLUME("message-sound.volume"),
     MESSAGE_SOUND_PITCH("message-sound.pitch"),
 
+    ANTI_SWEAR_ENABLE_CAPS_FILTER("anti-swear.enable-caps-filter"),
+    ANTI_SWEAR_ENABLE_SWEAR_FILTER("anti-swear.enable-swear-filter"),
+    ANTI_SWEAR_CAPS_FILTER_PERCENTAGE("anti-swear.caps-percent"),
+    ANTI_SWEAR_SWEAR_REGEX("anti-swear.swear-regex"),
+
     COMMAND_RELOAD_NAME("commands.reload.name"),
     COMMAND_RELOAD_PERMISSION("commands.reload.permission"),
 

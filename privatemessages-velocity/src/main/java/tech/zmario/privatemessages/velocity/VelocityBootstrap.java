@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginDescription;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import lombok.Getter;
 import net.byteflux.libby.LibraryManager;
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
 @Plugin(
@@ -37,31 +39,18 @@ public class VelocityBootstrap implements PrivateMessagesBootstrap {
 
     private final Platform platform = new Platform(PlatformType.VELOCITY, "2.1.1");
     private LibraryManager libraryManager;
-    private File dataFolder;
+    private final File dataFolder;
 
     @Inject
-    public VelocityBootstrap(ProxyServer proxyServer, Logger logger) {
+    public VelocityBootstrap(ProxyServer proxyServer, Logger logger, @DataDirectory Path dataDirectory) {
         this.plugin = new VelocityPlugin(this);
         this.proxyServer = proxyServer;
         this.logger = logger;
+        this.dataFolder = dataDirectory.toFile();
     }
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        PluginDescription pluginDescription = proxyServer.getPluginManager().getPlugin("privatemessages").get().getDescription();
-        File serverJar;
-        try {
-            serverJar = new File(Plugin.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        File folder = new File(serverJar.getParentFile() + "/plugins/", pluginDescription.getId());
-
-        if (!folder.exists()) folder.mkdirs();
-
-        dataFolder = folder;
-
         libraryManager = new VelocityLibraryManager<>(LoggerFactory.getLogger("PrivateMessages"),
                 dataFolder.toPath(),
                 getProxyServer().getPluginManager(),
