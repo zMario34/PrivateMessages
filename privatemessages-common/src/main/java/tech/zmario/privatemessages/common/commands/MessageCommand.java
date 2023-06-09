@@ -86,10 +86,11 @@ public class MessageCommand implements Command {
             return;
         }
 
-        if (target == sender) {
+        if (target.equals(sender)) {
             MessagesConfiguration.MESSAGE_SELF_DISABLED.sendMessage(sender, plugin);
             return;
         }
+
         String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         String senderServerName = plugin.getSenderFactory().getServerName(sender);
         String targetServerName = plugin.getSenderFactory().getServerName(target);

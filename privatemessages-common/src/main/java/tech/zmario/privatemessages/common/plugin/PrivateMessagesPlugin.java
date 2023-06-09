@@ -72,7 +72,7 @@ public abstract class PrivateMessagesPlugin {
 
     public void sendSpyMessage(Sender player, Sender receiver, String message) {
         getOnlineUsers().stream()
-                .filter(sender -> sender.hasPermission("privatemessages.spy"))
+                .filter(sender -> sender.hasPermission("privatemessages.spy") && dataStorage.hasSocialSpy(sender.getUniqueId()))
                 .forEach(sender -> MessagesConfiguration.SOCIAL_SPY_FORMAT.sendMessage(sender,
                         this,
                         new Placeholder("player", player.getName()),
