@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.byteflux.libby.Library;
 import net.byteflux.libby.LibraryManager;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import tech.zmario.privatemessages.bungee.commands.BungeeCommand;
 import tech.zmario.privatemessages.bungee.factory.BungeeSenderFactory;
 import tech.zmario.privatemessages.bungee.listeners.ConnectionListener;
@@ -11,10 +12,12 @@ import tech.zmario.privatemessages.common.commands.*;
 import tech.zmario.privatemessages.common.commands.interfaces.Command;
 import tech.zmario.privatemessages.common.configuration.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.factory.user.Sender;
+import tech.zmario.privatemessages.common.objects.User;
 import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 import tech.zmario.privatemessages.common.plugin.bootstrap.PrivateMessagesBootstrap;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Getter
@@ -96,4 +99,28 @@ public class BungeeCordPlugin extends PrivateMessagesPlugin {
         libraryManager.loadLibrary(textSerializer);
         libraryManager.loadLibrary(miniMessage);
     }
+
+    @Override
+    protected void registerPlayers() {
+
+        for (ProxiedPlayer player : bootstrap.getProxyServer().getPlayers()) {
+            UUID uuid = player.getUniqueId();
+
+            getSqlManager().isPresent(uuid).thenAccept(present -> {
+                if (!present) getSqlManager().createPlayer(uuid);
+
+                getSqlManager().getIgnoredPlayers(uuid).thenAccept(list -> {
+                    User user = new User(uuid, list);
+
+                    getSqlManager().getToggledStatus(uuid).thenAccept(user::setToggleEnabled);
+                    getSqlManager().getSocialSpyStatus(uuid).thenAccept(user::setSocialSpyEnabled);
+                    getSqlManager().getSoundStatus(uuid).thenAccept(user::setSoundEnabled);
+
+                    getDataStorage().getUsers().put(uuid, user);
+                });
+            });
+        }
+    }
+
+
 }

@@ -2,6 +2,7 @@ package tech.zmario.privatemessages.velocity;
 
 import com.google.common.collect.Lists;
 import com.velocitypowered.api.command.CommandMeta;
+import com.velocitypowered.api.proxy.Player;
 import lombok.Getter;
 import net.byteflux.libby.Library;
 import net.byteflux.libby.LibraryManager;
@@ -9,6 +10,8 @@ import tech.zmario.privatemessages.common.commands.*;
 import tech.zmario.privatemessages.common.commands.interfaces.Command;
 import tech.zmario.privatemessages.common.configuration.enums.SettingsConfiguration;
 import tech.zmario.privatemessages.common.factory.user.Sender;
+import tech.zmario.privatemessages.common.listeners.AbstractConnectionListener;
+import tech.zmario.privatemessages.common.objects.User;
 import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
 import tech.zmario.privatemessages.common.plugin.bootstrap.PrivateMessagesBootstrap;
 import tech.zmario.privatemessages.velocity.commands.VelocityCommand;
@@ -16,6 +19,7 @@ import tech.zmario.privatemessages.velocity.factory.VelocitySenderFactory;
 import tech.zmario.privatemessages.velocity.listeners.ConnectionListener;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Getter
@@ -69,6 +73,29 @@ public class VelocityPlugin extends PrivateMessagesPlugin {
 
             bootstrap.getProxyServer().getCommandManager().register(meta, new VelocityCommand(this, command));
         });
+    }
+
+    @Override
+    protected void registerPlayers() {
+
+        for (Player players : bootstrap.getProxyServer().getAllPlayers()) {
+            if (!players.isActive()) return;
+            UUID uuid = players.getUniqueId();
+
+            getSqlManager().isPresent(uuid).thenAccept(present -> {
+                if (!present) getSqlManager().createPlayer(uuid);
+
+                getSqlManager().getIgnoredPlayers(uuid).thenAccept(list -> {
+                    User user = new User(uuid, list);
+
+                    getSqlManager().getToggledStatus(uuid).thenAccept(user::setToggleEnabled);
+                    getSqlManager().getSocialSpyStatus(uuid).thenAccept(user::setSocialSpyEnabled);
+                    getSqlManager().getSoundStatus(uuid).thenAccept(user::setSoundEnabled);
+
+                    getDataStorage().getUsers().put(uuid, user);
+                });
+            });
+        }
     }
 
     @Override

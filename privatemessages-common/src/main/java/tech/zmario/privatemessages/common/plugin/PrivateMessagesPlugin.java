@@ -45,6 +45,7 @@ public abstract class PrivateMessagesPlugin {
         sqlManager = new SQLManager(this);
 
         registerCommands();
+        registerPlayers();
         finishLoad();
 
         String messagingType = configManager.getMessages().getString("messages-type");
@@ -83,6 +84,8 @@ public abstract class PrivateMessagesPlugin {
     protected abstract void finishLoad();
 
     protected abstract void registerCommands();
+
+    protected abstract void registerPlayers();
 
     protected abstract void loadLibraries();
 

@@ -6,11 +6,13 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import lombok.Getter;
 import net.byteflux.libby.LibraryManager;
 import net.byteflux.libby.VelocityLibraryManager;
 import org.slf4j.LoggerFactory;
+import tech.zmario.privatemessages.common.listeners.AbstractConnectionListener;
 import tech.zmario.privatemessages.common.platform.Platform;
 import tech.zmario.privatemessages.common.platform.PlatformType;
 import tech.zmario.privatemessages.common.plugin.PrivateMessagesPlugin;
@@ -57,6 +59,7 @@ public class VelocityBootstrap implements PrivateMessagesBootstrap {
                 this);
 
         plugin.enable();
+
     }
 
     @Subscribe

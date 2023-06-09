@@ -90,7 +90,7 @@ public class ReplyCommand implements Command {
                 new Placeholder("player_server", Utils.getServerDisplay(senderServerName, config)),
                 new Placeholder("target_server", Utils.getServerDisplay(targetServerName, config)));
 
-        MessagesConfiguration.REPLY_TARGET_FORMAT.sendMessage(sender, plugin,
+        MessagesConfiguration.REPLY_TARGET_FORMAT.sendMessage(target, plugin,
                 new Placeholder("target", sender.getName()),
                 new Placeholder("message", message),
                 new Placeholder("player_server", Utils.getServerDisplay(targetServerName, config)),
