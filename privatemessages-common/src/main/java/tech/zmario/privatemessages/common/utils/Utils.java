@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
+import java.awt.*;
 import java.util.regex.Pattern;
 
 @UtilityClass
@@ -14,11 +15,16 @@ public class Utils {
     public String getServerDisplay(String server, FileConfiguration config) {
         ConfigurationSection section;
 
-        if ((section = config.getConfigurationSection("servers-configuration")) != null &&
-                section.getKeys(false).contains(server.toLowerCase())) {
-            return MiniMessage.miniMessage().serialize(
-                    Component.text(section.getString(server + ".color") +
-                            section.getString(server + ".display-name")));
+        try {
+            if ((section = config.getConfigurationSection("servers-configuration")) != null &&
+                    section.getKeys(false).contains(server.toLowerCase())) {
+                return MiniMessage.miniMessage().serialize(
+                        Component.text(section.getString(server + ".color") +
+                                section.getString(server + ".display-name")));
+            }
+        } catch (RuntimeException ignored) {
+            System.out.println(Color.RED + "[PrivateMessages] Error while getting server's display name.");
+            return server;
         }
 
         return server;
