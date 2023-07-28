@@ -1,1 +1,0 @@
-{"id":"privatemessages","name":"PrivateMessages","version":"2.1.1","description":"A plugin that allows you to send private messages to other players.","authors":["zMario"],"dependencies":[],"main":"tech.zmario.privatemessages.velocity.VelocityBootstrap"}
