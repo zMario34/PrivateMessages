@@ -1,0 +1,6 @@
+tech\zmario\privatemessages\velocity\VelocityPlugin.class
+tech\zmario\privatemessages\velocity\commands\VelocityCommand.class
+tech\zmario\privatemessages\velocity\listeners\ConnectionListener.class
+velocity-plugin.json
+tech\zmario\privatemessages\velocity\factory\VelocitySenderFactory.class
+tech\zmario\privatemessages\velocity\VelocityBootstrap.class

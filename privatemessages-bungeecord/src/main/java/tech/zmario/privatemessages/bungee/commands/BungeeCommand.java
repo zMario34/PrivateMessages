@@ -1,9 +1,12 @@
 package tech.zmario.privatemessages.bungee.commands;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import tech.zmario.privatemessages.bungee.BungeeCordPlugin;
 import tech.zmario.privatemessages.common.commands.interfaces.Command;
+
+import java.util.Collections;
 
 public class BungeeCommand extends net.md_5.bungee.api.plugin.Command implements TabExecutor {
 
@@ -23,6 +26,11 @@ public class BungeeCommand extends net.md_5.bungee.api.plugin.Command implements
 
     @Override
     public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+
+        if (!(sender instanceof ProxiedPlayer)) {
+            return Collections.emptyList();
+        }
+
         return command.suggest(plugin.getSenderFactory().wrapSender(sender), args);
     }
 }
